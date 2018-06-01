@@ -19,7 +19,7 @@ $x,y ::= @P$
 ## Mathematical Models of Grammars
 $M,N ::= x | \lambda x.M | (M N)$
 
-$M[X] = X + (X x M[X]) + (M[X] x M[X])$
+$M[X] = X + (X \times M[X]) + (M[X] \times M[X])$
 
 . . .
 
@@ -38,18 +38,18 @@ $\pi ::= x(y) | \overline{x} y$
 
 . . .
 
-$P[X] = N[X] + (P[X], X] x P[X]) + P[X] + (X x P[X])$
+$P[X] = N[X] + (P[X], X] \times P[X]) + P[X] + (X \times P[X])$
 
-$N[X] = (\pi[X] x P[X]) + 1 + (N[X] x N[X])
+$N[X] = (\pi[X] \times P[X]) + 1 + (N[X] \times N[X])
 
-$\pi[X] = (X x X) + (X x X)
+$\pi[X] = (X \times X) + (X \times X)
 
 ## Mathematical Model of RHo Calc Grammar
 $P,Q ::= 0 | for(y \leftarrow x)P | x!(Q) | (P|Q) | *x$
 
 $x,y ::= @P$
 
-$P[X] = 1 + (X x X x P[X]) + (X x P[X]) + (P[X] x P[X]) + X$
+$P[X] = 1 + (X \times X \times P[X]) + (X \times P[X]) + (P[X] \times P[X]) + X$
 
 $RP = P[RP]$
 

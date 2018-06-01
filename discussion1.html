@@ -49,7 +49,7 @@
 </section><section id="mathematical-models-of-grammars" class="slide level2">
 <h2>Mathematical Models of Grammars</h2>
 <p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
-<p><span class="math inline">\(M[X] = X + (X x M[X]) + (M[X] x M[X])\)</span></p>
+<p><span class="math inline">\(M[X] = X + (X \times M[X]) + (M[X] \times M[X])\)</span></p>
 <div class="fragment">
 <p><span class="math inline">\(X = \lambda x | \triangle x\)</span></p>
 </div>
@@ -62,15 +62,15 @@
 <p><span class="math inline">\(N,M ::= \pi .P | 0 | M + N\)</span></p>
 <p><span class="math inline">\(\pi ::= x(y) | \overline{x} y\)</span></p>
 <div class="fragment">
-<p><span class="math inline">\(P[X] = N[X] + (P[X], X] x P[X]) + P[X] + (X x P[X])\)</span></p>
-<p>$N[X] = (x P[X]) + 1 + (N[X] x N[X])</p>
-<p>$= (X x X) + (X x X)</p>
+<p><span class="math inline">\(P[X] = N[X] + (P[X], X] \times P[X]) + P[X] + (X \times P[X])\)</span></p>
+<p>$N[X] = (P[X]) + 1 + (N[X] N[X])</p>
+<p>$= (X X) + (X X)</p>
 </div>
 </section><section id="mathematical-model-of-rho-calc-grammar" class="slide level2">
 <h2>Mathematical Model of RHo Calc Grammar</h2>
 <p><span class="math inline">\(P,Q ::= 0 | for(y \leftarrow x)P | x!(Q) | (P|Q) | *x\)</span></p>
 <p><span class="math inline">\(x,y ::= @P\)</span></p>
-<p><span class="math inline">\(P[X] = 1 + (X x X x P[X]) + (X x P[X]) + (P[X] x P[X]) + X\)</span></p>
+<p><span class="math inline">\(P[X] = 1 + (X \times X \times P[X]) + (X \times P[X]) + (P[X] \times P[X]) + X\)</span></p>
 <p><span class="math inline">\(RP = P[RP]\)</span></p>
 </section><section id="scala-models-of-grammars" class="slide level2">
 <h2>Scala Models of Grammars</h2>
