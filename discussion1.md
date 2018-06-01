@@ -25,11 +25,11 @@ $M[X] = X + (X \times M[X]) + (M[X] \times M[X])$
 
 . . .
 
-$W = \lambda x | \triangle x$
+$S = \lambda x | \triangle x$
 
 . . .
 
-$W[X] = X + X$
+$S[X] = X + X$
 
 ## Mathematical Model of Pi Calc Grammar
 $P,Q ::= N | (P|Q) | !P | (\nu x)P$
@@ -71,7 +71,7 @@ case class Application[X]( m : M[X], n : M[X] ) extends M[X]
 ```
 
 ## Scala Model of our "simple grammar"
-$X ::= \lambda x | \triangle x$
+$S ::= \lambda x | \triangle x$
 
 . . .
 
@@ -135,11 +135,17 @@ We want to define a simple expression (EXP) language
 . . .
 
 Valid things we should be able to do in this language are:
+
 * Write a number: `1` `4243`
+
 * Add Two numbers together: `45` + `33`
+
 * Multiply two numbers
+
 * Divide two numbers
+
 * Read a number from the console
+
 * Print a number
 
 . . .

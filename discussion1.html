@@ -118,10 +118,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
 <p><span class="math inline">\(M[X] = X + (X \times M[X]) + (M[X] \times M[X])\)</span></p>
 <div class="fragment">
-<p><span class="math inline">\(W = \lambda x | \triangle x\)</span></p>
+<p><span class="math inline">\(S = \lambda x | \triangle x\)</span></p>
 </div>
 <div class="fragment">
-<p><span class="math inline">\(W[X] = X + X\)</span></p>
+<p><span class="math inline">\(S[X] = X + X\)</span></p>
 </div>
 </section><section id="mathematical-model-of-pi-calc-grammar" class="slide level2">
 <h2>Mathematical Model of Pi Calc Grammar</h2>
@@ -153,7 +153,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">case</span> <span class="kw">class</span> Application[X]( m : M[X], n : M[X] ) <span class="kw">extends</span> M[X]</a></code></pre></div>
 </section><section id="scala-model-of-our-simple-grammar" class="slide level2">
 <h2>Scala Model of our “simple grammar”</h2>
-<p><span class="math inline">\(X ::= \lambda x | \triangle x\)</span></p>
+<p><span class="math inline">\(S ::= \lambda x | \triangle x\)</span></p>
 <div class="fragment">
 <div class="sourceCode" id="cb2"><pre class="sourceCode scala"><code class="sourceCode scala"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">trait</span> S[X]</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
@@ -199,7 +199,15 @@ endmodule</code></pre>
 <h2>Our first definition</h2>
 <p>We want to define a simple expression (EXP) language</p>
 <div class="fragment">
-<p>Valid things we should be able to do in this language are: * Write a number: <code>1</code> <code>4243</code> * Add Two numbers together: <code>45</code> + <code>33</code> * Multiply two numbers * Divide two numbers * Read a number from the console * Print a number</p>
+<p>Valid things we should be able to do in this language are:</p>
+<ul>
+<li><p>Write a number: <code>1</code> <code>4243</code></p></li>
+<li><p>Add Two numbers together: <code>45</code> + <code>33</code></p></li>
+<li><p>Multiply two numbers</p></li>
+<li><p>Divide two numbers</p></li>
+<li><p>Read a number from the console</p></li>
+<li><p>Print a number</p></li>
+</ul>
 </div>
 <div class="fragment">
 <p><code>print(1 + (read * 3) / 4)</code></p>
