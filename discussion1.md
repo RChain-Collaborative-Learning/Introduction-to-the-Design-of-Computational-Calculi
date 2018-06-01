@@ -130,25 +130,17 @@ endmodule
 ```
 
 ## Our first definition
-We want to define a simple expression (EXP) language
+We want to define a simple expression (EXP) language that can:
 
-. . .
+* Write a number: `1`, `4243`
 
-Valid things we should be able to do in this language are:
-
-* Write a number: `1` `4243`
-
-* Add Two numbers together: `45` + `33`
-
-* Multiply two numbers
-
-* Divide two numbers
+* Add Multiply, Divide numbers: `45` + `33`
 
 * Read a number from the console
 
 * Print a number
 
-. . .
+##
 
 `print(1 + (read * 3) / 4)`
 
