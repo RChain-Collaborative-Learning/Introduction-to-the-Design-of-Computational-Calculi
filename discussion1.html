@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>discussion1</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/contrib/auto-render.min.js"></script><script>document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section><section id="introduction-to-the-design-of-computational-calculi---discussion-1" class="title-slide slide level1"><h1>Introduction to the Design of Computational Calculi - Discussion 1</h1></section><section id="grammar" class="slide level2">
+<h2>Grammar</h2>
+<p>Allows us to answer the question: “Is this a valid program”?</p>
+<p>Often represented in BNF (Backus-Naur) form, a notation for context-free grammars</p>
+</section><section id="section" class="slide level2">
+<h2></h2>
+<p>Lambda Calc</p>
+<p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
+<p>Rho Calc</p>
+<p><span class="math inline">\(P,Q ::= 0 | for(y \leftarrow x)P | x!(Q) | (P|Q) | *x\)</span></p>
+<p><span class="math inline">\(x,y ::= @P\)</span></p>
+</section><section id="mathematical-models-of-grammars" class="slide level2">
+<h2>Mathematical Models of Grammars</h2>
+<p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
+<p><span class="math inline">\(M[X] = X + (X x M[X]) + (M[X] x M[X])\)</span></p>
+<div class="fragment">
+<p><span class="math inline">\(X = \lambda x | \triangle x\)</span></p>
+</div>
+<div class="fragment">
+<p><span class="math inline">\(M[X] = X + X\)</span></p>
+</div>
+</section><section id="mathematical-model-of-pi-calc-grammar" class="slide level2">
+<h2>Mathematical Model of Pi Calc Grammar</h2>
+<p><span class="math inline">\(P,Q ::= N | (P|Q) | !P | (\nu x)P\)</span></p>
+<p><span class="math inline">\(N,M ::= \pi .P | 0 | M + N\)</span></p>
+<p><span class="math inline">\(\pi ::= x(y) | \overline{x} y\)</span></p>
+<div class="fragment">
+<p><span class="math inline">\(P[X] = N[X] + (P[X], X] x P[X]) + P[X] + (X x P[X])\)</span></p>
+<p>$N[X] = (x P[X]) + 1 + (N[X] x N[X])</p>
+<p>$= (X x X) + (X x X)</p>
+</div>
+</section><section id="mathematical-model-of-rho-calc-grammar" class="slide level2">
+<h2>Mathematical Model of RHo Calc Grammar</h2>
+<p><span class="math inline">\(P,Q ::= 0 | for(y \leftarrow x)P | x!(Q) | (P|Q) | *x\)</span></p>
+<p><span class="math inline">\(x,y ::= @P\)</span></p>
+<p><span class="math inline">\(P[X] = 1 + (X x X x P[X]) + (X x P[X]) + (P[X] x P[X]) + X\)</span></p>
+<p><span class="math inline">\(RP = P[RP]\)</span></p>
+</section><section id="scala-models-of-grammars" class="slide level2">
+<h2>Scala Models of Grammars</h2>
+<p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
+<p>trait M[X]</p>
+<p>case class Mention<a href="x%20:%20X">X</a> extends M[X]</p>
+<p>case class Abstraction<a href="x%20:%20X,%20m%20:%20M%5BX%5D">X</a> extends M[X]</p>
+<p>case class Application<a href="m%20:%20M%5BX%5D,%20n%20:%20M%5BX%5D">X</a></p>
+</section><section id="scala-model-of-our-simple-grammar" class="slide level2">
+<h2>Scala Model of our “simple grammar”</h2>
+<p><span class="math inline">\(X = \lambda x | \triangle x\)</span></p>
+<p>trait S[X]</p>
+<p>case class lambda<a href="x%20:%20X">X</a> extends S[X]</p>
+<p>case class triangle<a href="x%20:%20X">X</a> extends S[X]</p>
+</section><section id="scala-model-of-pi-calc-grammar" class="slide level2">
+<h2>Scala Model of Pi Calc Grammar</h2>
+<p>trait P[X]</p>
+<p>case class par<a href="p%20:%20P%5BX%5D,%20q%20:%20P%5BX%5D">X</a> extends P[X] case class replication<a href="p%20:%20P%5BX%5D">X</a> extends P[X] case class new<a href="toBind%20:%20X,%20p%20:%20P%5BX%5D">X</a> extends P[X]</p>
+<p>trait Pi[X] case class input<a href="subject%20:%20X,%20object%20:%20X">X</a> extends Pi[X] case class output<a href="subject%20:%20X,%20object%20:%20X">X</a> extends Pi[X]</p>
+<p>case class normal<a href="sum%20:%20Set%5B(Pi%5BX%5D,%20P%5BX%5D)%5D">X</a> extends P[X]</p>
+</section><section id="scala-model-of-rho-calc-grammar" class="slide level2">
+<h2>Scala Model of Rho Calc Grammar</h2>
+<p>given as homework</p>
+</section></section>
+<section><section id="kframework" class="title-slide slide level1"><h1>KFramework</h1></section><section id="section-1" class="slide level2">
+<h2></h2>
+<p>“Programming lanaguages usually have a formally defined SYNTAX, but SEMANTICS are usually given in the form of a reference manual.”</p>
+</section><section id="uses" class="slide level2">
+<h2>Uses</h2>
+<p>Has been used to explore prototypical languages like <span class="math inline">\(\lambda\)</span> calculus, system F, and Agents</p>
+<p>Formal definitions for C, Python, Scheme, and OCL, Java 7, Haskell, and JavaScript</p>
+<p>K has been used to define type checkers and inferencers and can be used for program verification, model checking, and researching runtime verification techniques.</p>
+</section></section>
+<section><section id="our-first-definition" class="title-slide slide level1"><h1>Our first definition</h1></section><section id="modules" class="slide level2">
+<h2>Modules</h2>
+<p>module <NAME> … endmodule</p>
+</section><section id="our-first-definition-1" class="slide level2">
+<h2>Our first definition</h2>
+<p>module EXP-SYNTAX imports INT</p>
+<p>syntax Exp ::= Int | Exp “+” Exp | Exp &quot;*&quot; Exp | Exp “/” Exp | “read” | “print” “(” Exp “)” | “(” Exp “)” endmodule</p>
+<p>module EXP imports EXP-SYNTAX endmodule</p>
+</section><section id="pi-calc-syntax-in-k-framework" class="slide level2">
+<h2>Pi Calc Syntax in K-Framework</h2>
+<p>Homework</p>
+<p>Check out <a href="https://github.com/kframework/k5/tree/master/k-distribution/tutorial/1_k/1_lambda/lesson_1">lambda calculus tutorial lesson 1</a> for hints</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
