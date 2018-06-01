@@ -136,9 +136,9 @@ We want to define a simple expression (EXP) language that can:
 
 * Add Multiply, Divide numbers: `45` + `33`
 
-* Read a number from the console
+* Read a number from the console: read
 
-* Print a number
+* Print a number: print(4)
 
 ##
 
