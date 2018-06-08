@@ -30,13 +30,15 @@ Bound names and Free Names
 
 $M,N ::= x | \lambda x.M | (M N)$
 
-$FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \\ \{x\}, FN( (M N) ) = FN(M) \cup FN(N)$
+$FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \setminus \{x\}, FN( (M N) ) = FN(M) \cup FN(N)$
 
 A name is bound if it occurs in the term, and is not free.
 
 . . .
 
 How would we define names of a lambda term?
+
+#
 
 ## Homework (Greg)
 

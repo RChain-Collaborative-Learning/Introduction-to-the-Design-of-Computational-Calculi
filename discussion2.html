@@ -57,12 +57,13 @@
 <h2></h2>
 <p>Bound names and Free Names</p>
 <p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
-<p><span class="math inline">\(FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \\ \{x\}, FN( (M N) ) = FN(M) \cup FN(N)\)</span></p>
+<p><span class="math inline">\(FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \setminus \{x\}, FN( (M N) ) = FN(M) \cup FN(N)\)</span></p>
 <p>A name is bound if it occurs in the term, and is not free.</p>
 <div class="fragment">
 <p>How would we define names of a lambda term?</p>
 </div>
-</section><section id="homework-greg" class="slide level2">
+</section></section>
+<section><section id="section-3" class="title-slide slide level1"><h1></h1></section><section id="homework-greg" class="slide level2">
 <h2>Homework (Greg)</h2>
 <p>Define Domain Equation &amp; Scala Types for the Grammar of: * Ambient Process Calculus * Blue Calculus * Linear Lambda Calculus</p>
 <p>Port the Free Names &amp; Bound Names equations to the scala representation of our Rho Grammar.</p>
