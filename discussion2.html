@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>discussion2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/contrib/auto-render.min.js"></script><script>document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body);
+  });</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section><section id="introduction-to-the-design-of-computational-calculi---discussion-2" class="title-slide slide level1"><h1>Introduction to the Design of Computational Calculi - Discussion 2</h1></section><section id="structural-equivalence" class="slide level2">
+<h2>Structural Equivalence</h2>
+<p>Allows us to erase distinctions in our grammar that we do not want to exist.</p>
+<p><span class="math inline">\(P|Q \equiv Q|P\)</span></p>
+</section><section id="section" class="slide level2">
+<h2></h2>
+<p>Structural equivalences are two-way rewrite rules.</p>
+<p><span class="math inline">\(P|Q \rightarrow Q|P\)</span></p>
+<p><span class="math inline">\(Q|P \rightarrow P|Q\)</span></p>
+<div class="fragment">
+<p>Computational steps (or reductions) are one-way rewrite rules.</p>
+<p><span class="math inline">\(x!(P) | for (y \leftarrow x) \{Q\} \rightarrow Q[@P/x]\)</span></p>
+</div>
+</section><section id="section-1" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(\alpha\)</span>-equivalence</p>
+<p>We can “rename” our variables without introducing conflicts and our program behaves the same.</p>
+<p><span class="math inline">\(\lambda x.x \equiv \lambda y.y\)</span></p>
+</section><section id="section-2" class="slide level2">
+<h2></h2>
+<p>Bound names and Free Names</p>
+<p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
+<p><span class="math inline">\(FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \\ \{x\}, FN( (M N) ) = FN(M) \cup FN(N)\)</span></p>
+<p>A name is bound if it occurs in the term, and is not free.</p>
+<div class="fragment">
+<p>How would we define names of a lambda term?</p>
+</div>
+</section><section id="homework-greg" class="slide level2">
+<h2>Homework (Greg)</h2>
+<p>Define Domain Equation &amp; Scala Types for the Grammar of: * Ambient Process Calculus * Blue Calculus * Linear Lambda Calculus</p>
+<p>Port the Free Names &amp; Bound Names equations to the scala representation of our Rho Grammar.</p>
+</section><section id="ambient-process-calculus" class="slide level2">
+<h2>Ambient Process Calculus</h2>
+<p>An Ambient is a bounded place where computation happens</p>
+<p>An Ambient can contain other Ambients</p>
+<p>An Ambient can be moved</p>
+<p>An Ambient can contain multiple processes running directly in the Ambient, controlling it.</p>
+<p>A Name is something that can be created, passed around, and used to name new ambients.</p>
+</section><section id="homework-jake" class="slide level2">
+<h2>Homework (Jake)</h2>
+<p>Define the grammar of Pi-Calc in KFramework</p>
+<div class="fragment">
+<p>Define the semantics of Pi-Calc in KFramework</p>
+<p>See <a href="https://github.com/kframework/k5/tree/master/k-distribution/tutorial/1_k">KFramework Tutorials</a> and <a href="https://github.com/rchain/rchain/blob/master/rholang/src/main/k/minpi2/minpi.k">the beginnings of a definition</a></p>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
