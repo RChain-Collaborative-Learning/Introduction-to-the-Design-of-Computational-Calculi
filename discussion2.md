@@ -43,6 +43,7 @@ How would we define names of a lambda term?
 ## Homework (Greg)
 
 Define Domain Equation & Scala Types for the Grammar of:
+
 * Ambient Process Calculus
 * Blue Calculus
 * Linear Lambda Calculus
