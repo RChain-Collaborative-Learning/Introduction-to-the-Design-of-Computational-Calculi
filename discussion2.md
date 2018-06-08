@@ -8,9 +8,7 @@ $P|Q \equiv Q|P$
 ##
 Structural equivalences are two-way rewrite rules.
 
-$P|Q \rightarrow Q|P$
-
-$Q|P \rightarrow P|Q$
+$P|Q \rightleftharpoons Q|P$
 
 . . .
 
@@ -30,7 +28,11 @@ Bound names and Free Names
 
 $M,N ::= x | \lambda x.M | (M N)$
 
-$FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \setminus \{x\}, FN( (M N) ) = FN(M) \cup FN(N)$
+$FN(x) = \{x\}$
+
+$FN(\lambda x.M) = FN(M) \setminus \{x\}$
+
+$FN( (M N) ) = FN(M) \cup FN(N)$
 
 A name is bound if it occurs in the term, and is not free.
 
@@ -38,9 +40,9 @@ A name is bound if it occurs in the term, and is not free.
 
 How would we define names of a lambda term?
 
-#
+# Hands-on
 
-## Homework (Greg)
+## Greg
 
 Define Domain Equation & Scala Types for the Grammar of:
 
@@ -61,7 +63,7 @@ An Ambient can contain multiple processes running directly in the Ambient, contr
 
 A Name is something that can be created, passed around, and used to name new ambients.
 
-## Homework (Jake)
+## Jake
 
 Define the grammar of Pi-Calc in KFramework
 

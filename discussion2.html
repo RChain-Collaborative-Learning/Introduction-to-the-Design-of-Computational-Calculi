@@ -42,8 +42,7 @@
 </section><section id="section" class="slide level2">
 <h2></h2>
 <p>Structural equivalences are two-way rewrite rules.</p>
-<p><span class="math inline">\(P|Q \rightarrow Q|P\)</span></p>
-<p><span class="math inline">\(Q|P \rightarrow P|Q\)</span></p>
+<p><span class="math inline">\(P|Q \rightleftharpoons Q|P\)</span></p>
 <div class="fragment">
 <p>Computational steps (or reductions) are one-way rewrite rules.</p>
 <p><span class="math inline">\(x!(P) | for (y \leftarrow x) \{Q\} \rightarrow Q[@P/x]\)</span></p>
@@ -57,14 +56,16 @@
 <h2></h2>
 <p>Bound names and Free Names</p>
 <p><span class="math inline">\(M,N ::= x | \lambda x.M | (M N)\)</span></p>
-<p><span class="math inline">\(FN(x) = \{x\}, FN(\lambda x.M) = FN(M) \setminus \{x\}, FN( (M N) ) = FN(M) \cup FN(N)\)</span></p>
+<p><span class="math inline">\(FN(x) = \{x\}\)</span></p>
+<p><span class="math inline">\(FN(\lambda x.M) = FN(M) \setminus \{x\}\)</span></p>
+<p><span class="math inline">\(FN( (M N) ) = FN(M) \cup FN(N)\)</span></p>
 <p>A name is bound if it occurs in the term, and is not free.</p>
 <div class="fragment">
 <p>How would we define names of a lambda term?</p>
 </div>
 </section></section>
-<section><section id="section-3" class="title-slide slide level1"><h1></h1></section><section id="homework-greg" class="slide level2">
-<h2>Homework (Greg)</h2>
+<section><section id="hands-on" class="title-slide slide level1"><h1>Hands-on</h1></section><section id="greg" class="slide level2">
+<h2>Greg</h2>
 <p>Define Domain Equation &amp; Scala Types for the Grammar of:</p>
 <ul>
 <li>Ambient Process Calculus</li>
@@ -79,8 +80,8 @@
 <p>An Ambient can be moved</p>
 <p>An Ambient can contain multiple processes running directly in the Ambient, controlling it.</p>
 <p>A Name is something that can be created, passed around, and used to name new ambients.</p>
-</section><section id="homework-jake" class="slide level2">
-<h2>Homework (Jake)</h2>
+</section><section id="jake" class="slide level2">
+<h2>Jake</h2>
 <p>Define the grammar of Pi-Calc in KFramework</p>
 <div class="fragment">
 <p>Define the semantics of Pi-Calc in KFramework</p>
