@@ -55,11 +55,19 @@ Port the Free Names & Bound Names equations to the scala representation of our R
 ## Ambient Process Calculus
 An Ambient is a bounded place where computation happens
 
+. . .
+
 An Ambient can contain other Ambients
+
+. . .
 
 An Ambient can be moved
 
+. . .
+
 An Ambient can contain multiple processes running directly in the Ambient, controlling it.
+
+. . .
 
 A Name is something that can be created, passed around, and used to name new ambients.
 
