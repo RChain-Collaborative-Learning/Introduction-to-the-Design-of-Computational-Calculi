@@ -1,0 +1,24 @@
+Input gaurded choice can be encoded into choice-free
+
+katusya
+no par preserving tranlation of mixed choice sum into the asyncrhonous 
+(check email)
+
+par preserving criteria is weak form of full abstraction
+
+
+No proof of fully abstract encoding of ambient calculus into the pi calculus
+  - jump in expressivity between pi calculus and ambient calculus
+
+  - Ambient calc (and rholang) leader election as a one-line program
+
+
+Links to ask Greg for:
+  Scala implementation of Rho calculus
+  fully abstract encoding of ambient calc in rhocalc
+
+Write down a computational calculus style presentation of the formation of the arabic numerals and an operational semantics for addition
+
+Grammar for the numerals
+Operational semantics for addition
+extra credit, roman numerals

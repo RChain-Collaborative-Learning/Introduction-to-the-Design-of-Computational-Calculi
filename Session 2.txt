@@ -1,0 +1,28 @@
+BNF equivalent to CTF grammars
+  - What are the subtelties?
+
+Universal Algebra
+  - also interested in structural relationships
+  - written down generatively in the same way that grammars are generative
+
+::= means "are of the form"
+
+(lambda and for comprehension are similar)
+
+Rules of a game IS this term a legal lambda term
+
+multi-headed presentation in k-framework?
+
+Numbering scheme for rho-calc terms
+
+
+Mathematical models of grammars
+M[X] = X + (X x M[X]) + (M[X] x M[X])
+
++ means "disjoint union"
+[X] means parametric in the set x
+
+P = 1
+    + (X x X x P[X]) +
+
+fixed point of a recursion

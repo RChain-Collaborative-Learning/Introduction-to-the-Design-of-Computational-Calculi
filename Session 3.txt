@@ -1,0 +1,33 @@
+Mobile Process Calculi
+  Blue Calculus
+  Ambient Calculus
+  Join Calculus
+
+Write domain equation, 
+
+Linear Lambda Calculus
+  See bramskys Computational interpretations of linear logic
+
+Intensional : program to compress set
+Extensional : elements given one by one
+
+SKI Calculus
+Combinator was a color of a chip
+
+
+Jamie Gobie andy pitts interpreting binding
+Nominal rewrite
+Nominal lawverie theories
+
+variant of ZF set theory where you have atoms
+in FM set theory you assume a set of atoms
+atoms used to talk about binders. hmmm
+
+rho calc fundamentally different than gabbay and pits. New universe of set theories, new approach to nominal theories. reflection is also just as generic. "reflective lawvere theories, reflective rewrite systems"
+
+
+Universal algebra came before category theory
+
+generators -> grammar
+
+structural equiv is an algebra on the free monad

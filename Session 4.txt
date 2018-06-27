@@ -1,0 +1,22 @@
+SKI Calculus : Variable free, can compile lambda calculus
+see the action of abstraction
+
+Par forms communitive monoid
+
+
+syntax left mul div
+
+important for LADL
+Grammar is representable by Monads or combinations of monads
+need to be careful when you introduce variables
+Look at Nominal Calculi, Nominal theories
+
+Lawveire theories
+
+Monad to grammar
+
+"Free Monad" the same as "Language that Grammar defines"
+
+Structural equivalences are algebras of monads
+
+corrado priami
