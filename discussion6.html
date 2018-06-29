@@ -43,31 +43,58 @@
 <p><span class="math inline">\(\frac{y \in N, x \equiv _N y}{x!(R) \downarrow _N x}\)</span></p>
 <p><span class="math inline">\(\frac{P \downarrow _N x \text{ or } Q \downarrow _N x}{P|Q \downarrow _N x}\)</span></p>
 <div class="fragment">
-<p>We write <span class="math inline">\(P \Downarrow _N x\)</span> if there is <span class="math inline">\(Q\)</span> such that <span class="math inline">\(P \Leftarrow Q\)</span> and <span class="math inline">\(Q \downarrow _N x\)</span></p>
+<p>We write <span class="math inline">\(P \Downarrow _N x\)</span> if there is <span class="math inline">\(Q\)</span> such that <span class="math inline">\(P \Rightarrow Q\)</span> and <span class="math inline">\(Q \downarrow _N x\)</span></p>
 </div>
 </section><section id="true-or-false" class="slide level2">
 <h2>True or False</h2>
-<p><span class="math inline">\(x!(P) | x(y).Q \downarrow _N x\)</span></p>
+<p><span class="math inline">\(x!(P) | x(y).Q \downarrow _{\{x,y,z\}} x\)</span></p>
 </section><section id="section-1" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(y).(P) | y!(Q) \downarrow _N x\)</span></p>
+<p><span class="math inline">\(x(y).(P) | y!(Q) \downarrow _{\{x,y,z\}} x\)</span></p>
 </section><section id="section-2" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _N x\)</span></p>
+<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _{\{x,y,z\}} x\)</span></p>
 </section><section id="section-3" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _N y\)</span></p>
+<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _{\{x,y,z\}} y\)</span></p>
 </section><section id="section-4" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(z).y!(P) | x!(*z) \downarrow _N y\)</span></p>
+<p><span class="math inline">\(x(z).y!(P) | x!(*z) \downarrow _{\{x,y,z\}} y\)</span></p>
 </section><section id="section-5" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _N z\)</span></p>
+<p><span class="math inline">\(x(y).y!(P) | x!(*z) \downarrow _{\{x,y,z\}} z\)</span></p>
 </section><section id="section-6" class="slide level2">
 <h2></h2>
-<p><span class="math inline">\(x(y).y!(P) | x!(*z) \Downarrow _N z\)</span></p>
+<p><span class="math inline">\(x(y).y!(P) | x!(*z) \Downarrow _{\{x,y,z\}} z\)</span></p>
 </section></section>
-<section><section id="bisimulation" class="title-slide slide level1"><h1>Bisimulation</h1></section></section>
+<section><section id="bisimulation" class="title-slide slide level1"><h1>Bisimulation</h1></section><section id="section-7" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(N\)</span>-barbed bisimulation is parametric in a set of names, <span class="math inline">\(N\)</span>.</p>
+<p><span class="math inline">\(P S_N Q\)</span> is a symmetric binary relation that implies:</p>
+<p>If <span class="math inline">\(P \rightarrow P&#39;\)</span> then <span class="math inline">\(Q \Rightarrow Q&#39;\)</span> and <span class="math inline">\(P&#39; S_N Q&#39;\)</span></p>
+<p>If <span class="math inline">\(P \downarrow _N x\)</span> then <span class="math inline">\(Q \Downarrow _N x\)</span></p>
+</section><section id="true-or-false-1" class="slide level2">
+<h2>True or False</h2>
+<p><span class="math inline">\(x!(*y) S_{\{x,y\}} x!(*z)\)</span></p>
+</section><section id="section-8" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(x!(*y) S_{\{x,y\}} x!(*z) | y!(*z)\)</span></p>
+</section><section id="section-9" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(x!(*y) S_{\{x,y\}} x(*z) | z!(*z)\)</span></p>
+</section><section id="section-10" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(x!(*y) S_{\{x,y\}} x!(*z) | y(z).x!(z)\)</span></p>
+</section><section id="section-11" class="slide level2">
+<h2></h2>
+<p><span class="math inline">\(x!(*y) S_{\{x,y\}} z!(*x) | z(z).z!(*y)\)</span></p>
+</section></section>
+<section><section id="full-abstraction" class="title-slide slide level1"><h1>Full Abstraction</h1></section><section id="section-12" class="slide level2">
+<h2></h2>
+<p>Parametric in two equivalences, one for the source (<span class="math inline">\(\equiv _s\)</span>) and one for the target (<span class="math inline">\(\equiv _t\)</span>) language</p>
+<p>Target is a full abstraction of Source if</p>
+<p><span class="math inline">\(P \equiv _s Q \Leftrightarrow [P] \equiv _t [Q]\)</span></p>
+</section></section>
     </div>
   </div>
 
