@@ -1,0 +1,35 @@
+Comparing Processes:
+
+Structural equivalence
+  abstract away parts of our syntax
+  that differentate processes in ways we weren't intending
+
+Bisimulation
+  Gives you a way to say what portion of your process you wish to
+  observe (these are called barbs)
+  
+  In the example of the N-barbed bisimulation these are outputs on a
+  set of names
+
+Reduction Congruence
+  If I drop a process in a context, does it behave "the same"
+  (which can still be defined via our barbs or observation relation)
+
+
+x!(*z) | z!(*z)
+...is {x,y}-barbed bisimilar to
+x!(*y) 
+
+But is not reduction congruent
+Consider the context:
+
+[] | z(q).y!(*q)
+
+( x!(*z) | z!(*z) ) | z(q).y!(*q)
+...reduces to
+x!(*z) | y!(*q)
+...which is observable at x and y
+
+But
+x!(*y) | z(q).y!(*q)
+...is never observable at y

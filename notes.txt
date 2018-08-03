@@ -1,0 +1,34 @@
+R[X] ::= 0 , for(y <- x)P , x!(P)  , P|Q             , *x
+
+R[X]   = 1 + X*X*R[X]     + X*R[X] + R[X]*R[X]       + X
+dR[X]  = 0 + X*X*1        + X*1    + R[X]*1 + 1*R[X] + 0
+
+---
+
+K ::= [] , for(y <- x)[] , x!([]) , P|[] , []|Q
+
+K   = 1  + X*X*1         , X*1    , P*1  , 1*Q
+
+---
+
+Loc[T] = dT*T
+
+PR = R[PR]        (rho calculus)
+
+LR = R[Loc[LR]] = R[(dLR*LR)]       (spacial rho calc)
+
+---
+
+Monoid:
+M,N ::= 0
+      | G
+      | M + N
+
+M + 0 == M == 0 + M
+
+M1 + ( M2 + M3 ) == (M1 + M2) + M3
+
+Monad:
+shape = T[X]
+unit = wrap[X] : X -> T[X]
+mult = roll[X] : T[T[X]] -> T[X]

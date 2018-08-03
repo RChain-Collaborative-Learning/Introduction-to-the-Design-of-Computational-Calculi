@@ -1,6 +1,6 @@
 Input gaurded choice can be encoded into choice-free
 
-katusya
+Catuscia Palamidessi
 no par preserving tranlation of mixed choice sum into the asyncrhonous 
 (check email)
 

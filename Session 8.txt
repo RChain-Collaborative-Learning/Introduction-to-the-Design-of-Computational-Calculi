@@ -1,0 +1,8 @@
+Minimal contexts Milner, Soule, and 
+https://www.coursera.org/lecture/system-validation-modal-formulas/hennessy-milner-logic-sqvWv
+
+Minimal sets of K contexts where you put processes to find bisimulation
+
+What does a type in rho calculus look like?
+
+Representing Knots as processes (Meredith)

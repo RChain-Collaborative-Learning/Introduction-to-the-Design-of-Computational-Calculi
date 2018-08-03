@@ -1,0 +1,17 @@
+Lambda Calculus:
+
+M,N ::= x
+      | \lambda x . M
+      | (M N)
+
+[| false |]         = \emptyset
+[| ~\phi |]         = L(M) \ [| \phi |]
+[| \phi \or \psi |] = [| \phi |] \cup [| \psi |] 
+
+[| /x/ |] = { m \in L(M) | m \equiv x }
+[| \lambda \phi . \psi |] = { m \in L(M) | m = \lambda m1.m2,
+                                           m1 \in [| \phi |],
+                                           m2 \in [| \psi |] }
+[| (\phi \psi) |] = { m \in L(M) | m = (m1 m2),
+                                   m1 \in [| \phi |],
+ 

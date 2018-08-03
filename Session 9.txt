@@ -1,0 +1,13 @@
+The rewrite rules to bisimulation congruences
+https://www.cl.cam.ac.uk/~pes20/labels-long.ps
+
+Deriving bisimulation congrucences for reactive systems
+http://pauillac.inria.fr/~leifer/articles/leifer-derbc.pdf
+
+Construct a bisimulation relation
+Bisimular "up-to"
+
+Christian Williams distributive law between monads to characterize different
+sorts of operation sementics, relate this to the bisimulation
+
+Processes as space

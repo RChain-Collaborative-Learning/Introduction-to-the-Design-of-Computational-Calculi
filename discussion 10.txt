@@ -1,0 +1,78 @@
+Monoid:
+M,N ::= e
+      | g
+      | M * N
+
+[|  true   |] = L(M)
+[|   ~A    |] = L(M) - [| A |]
+[| false |] = ~true = emptyset
+
+[| A and B |] = [|A|] intersect [|B|]
+
+~(A or B) = ~A and ~B
+
+[|   E   |] = { m in L(M) | m equiv e }
+[|  G_i  |] = { m in L(M) | m equiv g_i }
+[| A * B |] = { m in L(M) | m = m1 * m2,
+                            m1 in [| A |],
+                            m2 in [| B |] }
+
+Blue Calculus:
+P,Q ::= x
+      | (P x)
+      | \lambda x . P
+      | new x in P
+      | (x <- P)
+      | (x = P)
+      | (P|Q)
+
+
+A,B ::= false
+      | A or B
+      | ~A
+
+
+[| false |] = emptyset
+[| A or B |] = [| A |] union [| B |]
+[| ~A |] = L(M) - [| A |]
+A and B = ~ (~A or ~B)
+
+[| x |] = { m in L(M) | m == x }
+[| (P x) |] = { m in L(M) | Exists m1,m2, m = (m1 m2),
+                            m1 in [|P|],
+                            m2 in [|x|] }
+
+
+
+
+
+
+
+
+sends data on x:
+x!(true) | true
+
+does not send data on x:
+~(x!(true) | true)
+
+receives data from y or z:
+
+sends data only on x:
+x!(true) | ~((~x)!(true) | true)
+
+
+
+
+
+
+
+
+Modal Logic
+<>x "Possibly x"
+[]x "Necessarily x"
+
+~<>x = []~x
+
+
+Can never send data on x:
+[]~(x!(true) | true)

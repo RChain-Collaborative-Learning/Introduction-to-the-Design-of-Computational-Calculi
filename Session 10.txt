@@ -1,0 +1,12 @@
+x!([])
+Modal logic
+
+naming and necessity
+  diamond for possiblity
+  square for necessity
+
+Reachability relationships
+
+Model Theory vs Proof theory
+
+not from one formula to another : proof theory

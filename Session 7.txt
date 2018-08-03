@@ -1,0 +1,31 @@
+Monoid:
+M,N ::= 0
+      | G
+      | M + N
+
+M + 0 == M == 0 + M
+
+M1 + ( M2 + M3 ) == (M1 + M2) + M3
+
+M1 + ( M2 + M3 ) 
+if M2 + M3 => M4
+
+
+SOS Gordon Plotkin
+
+Parsing is Type Checking
+
+John Barwise (viscious circles) about solubale domain equations
+
+Lawvere Theories look at the relationship between Monads and Lawvere Theories
+
+Monad:
+shape = T[X]
+unit = wrap[X] : X -> T[X]
+mult = roll[X] : T[T[X]] -> T[X]
+
+Look at coherence laws
+
+Connor mcbride (derivitave of a type gives you a one-holed context)
+
+Huet (derivative give you information of location in a tree generically)
