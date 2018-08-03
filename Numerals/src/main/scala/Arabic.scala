@@ -17,7 +17,7 @@ object Arabic {
       protected def prev: Digit
       protected def next: Digit
 
-      final override def compare(that: Digit): Int = this match {
+      override def compare(that: Digit): Int = this match {
         case Zero => that match {
           case Zero => 0
           case _ => 1
@@ -39,54 +39,75 @@ object Arabic {
 
     }
 
+    // This is annoying, but if felt like cheating to instantiate this class with Ints
     final case object Zero extends Digit {
       protected val prev: Digit = Nine
       protected val next: Digit = One
+
+      override def toString: String = "0"
     }
 
     final case object One extends Digit {
       protected val prev: Digit = Zero
       protected val next: Digit = Two
+
+      override def toString: String = "1"
     }
 
     final case object Two extends Digit {
       protected val prev: Digit = One
       protected val next: Digit = Three
+
+      override def toString: String = "2"
     }
 
     final case object Three extends Digit {
       protected val prev: Digit = Two
       protected val next: Digit = Four
+
+      override def toString: String = "3"
     }
 
     final case object Four extends Digit {
       protected val prev: Digit = Three
       protected val next: Digit = Five
+
+      override def toString: String = "4"
     }
 
     final case object Five extends Digit {
       protected val prev: Digit = Four
       protected val next: Digit = Six
+
+      override def toString: String = "5"
     }
 
     final case object Six extends Digit {
       protected val prev: Digit = Five
       protected val next: Digit = Seven
+
+      override def toString: String = "6"
     }
 
     final case object Seven extends Digit {
       protected val prev: Digit = Six
       protected val next: Digit = Eight
+
+      override def toString: String = "7"
     }
 
     final case object Eight extends Digit {
       protected val prev: Digit = Seven
       protected val next: Digit = Nine
+
+      override def toString: String = "8"
     }
 
     final case object Nine extends Digit {
       protected val prev: Digit = Eight
       protected val next: Digit = Zero
+
+      override def toString: String = "9"
     }
 
   }
@@ -119,20 +140,22 @@ object Arabic {
         }
       }
 
-      final override def equals(o: scala.Any): Boolean = o match {
+      override final def equals(o: scala.Any): Boolean = o match {
         case that: Numeral[X] => number == that.number
         case _ => false
       }
 
-      final override def hashCode: Int = 41 + number.hashCode
+      override final def hashCode: Int = 41 + number.hashCode
+
+      override final def toString: String = number.mkString
 
     }
 
     final case class Lift[X <: Addable[X] with Ordered[X] with HasOne[X]]( x: X )
-      extends Numeral[X]( number = Seq(x) )
+      extends Numeral( number = Seq(x) )
 
     final case class Concat[X <: Addable[X] with Ordered[X] with HasOne[X]]( a: Numeral[X], b: Numeral[X] )
-      extends Numeral[X]( number = b.number ++ a.number )
+      extends Numeral[X]( if ( a.number.last < a.number.head.one ) b.number else b.number ++ a.number )
 
   }
 
@@ -150,13 +173,15 @@ object Arabic {
         case _ => false
       }
 
-      final override def hashCode: Int = 41 + sum.hashCode
+      override final def hashCode: Int = 41 + sum.hashCode
 
       final def reductions: Set[Sum[X]] = {
         for ( summandA <- sum;
               summandB <- sum - summandA
         ) yield new Sum( (sum - (summandA, summandB)) + summandA.+(summandB) )
       }.toSet
+
+      override final def toString: String = sum.mkString(sep = "+")
 
     }
 
