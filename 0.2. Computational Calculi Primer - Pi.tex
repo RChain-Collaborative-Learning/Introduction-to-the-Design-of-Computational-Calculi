@@ -1,0 +1,278 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\newcommand{\lcal}{\lambda-\text{calculus}}
+\newcommand{\pcal}{\pi-\text{calculus}}
+\newcommand{\rcal}{\rho-\text{calculus}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Computational Calculus Primer Part 2: Pi calculus}
+
+\maketitle
+
+\subsection{Overview}
+Our interest in $\pi$-calculus lies in the fact that it is the precursor of $\rho$-calculus. It is a model of concurrent computation, or more specifically, a process calculus based upon a notion of naming. In a process calculus, we represent interactions between independent \emph{agents} or \emph{processes} as message-passing, as opposed to modifications of shared variables (as in $\lambda$-calculus). The $\pi$-calculus differs from $\lambda$-calculus in the distinction made between names and processes and by the addition of term constructors, including \emph{parallel composition} which is responsible for concurrency. So there are two distinct entities in $\pi$-calculus, processes and names, and different interactions between processes and names. However, just like $\lambda$-terms, the processes in $\pi$-calculus are built from names.
+
+Parallel composition allows the computation in processes to proceed either concurrently and independently or communicate on a shared channel. This is useful for smart contract applications, storing state transitions of a virtual machine, and ultimately, for scalability.
+
+In this post, we discuss the grammar, structural congruence, and operational semantics of $\pi$-calculus.
+
+\section{Pi calculus}
+Here we will discuss a slightly simplified version of $\pi$-calculus proposed by Robin Milner [1].
+
+\subsection{Grammar}
+The BNF presentation of a grammar for $\pi$-calculus
+\begin{equation} \label{pbnf}
+P, Q \ ::= \ 0 \ | \ x(y).P \ | \ \bar{x} y .P \ | \ (\text{new } x)P \ | \ P|Q \ | \ !P
+\end{equation}
+much like that of $\lambda$-calculus, is parametric in a set of names $X$. Without even knowing what these operators mean, we already know that we can write
+
+\[ P[X] \ ::= \ 0 \ | \ X(X).P[X] \ | \ \bar{X} X .P[X] \ | \ (\text{new } X)P[X] \ | \ P[X] | P[X] \ | \ !P[X] \]
+to express this dependence on $X$ explicitly. \\
+
+Returning to \eqref{pbnf}, the admissible terms in this grammar, i.e. the expressions on the right-hand side of this presentation, are also called \emph{productions} or \emph{term constructors}. We discuss these productions below. \\
+
+\emph{Stopped process}: $0$ \\
+This process represents ``do nothing'', i.e. execution is complete, and it has stopped. \\
+
+\emph{Input-guarded continuation} or \emph{input prefixing}: $x(y).P$ \\
+This process waits for a name sent on channel $x$ to substitute for the name $y$ in the process $P$. This plays an analogous role to abstraction of the name $y$, $\lambda y.P$, in $\lambda$-calculus, binding the name $y$ in the process $P$. \\
+
+\emph{Send on a channel and execute} or \emph{output prefixing}: $\bar{x} y .P$ \\
+Sends the name $y$ on the channel $x$ as a substitute name in an input-guarded process waiting on the channel $x$ and then runs $P$. \\
+
+\emph{Restriction} or \emph{creation of a new name}: $(\text{new } x)P$ \\
+$(\nu x)P$ - pronounced ``new $x$ in $P$'' - defines $x$ as a new name and binds it in the process $P$. \\
+
+\emph{Parallel composition}: $P \ | \ Q$ \\
+$P \ | \ Q$ - pronounced ``$P$ par $Q$'' - means the processes $P$ and $Q$ are concurrently active; they can act independently, or they can communicate with one another. \\
+
+\emph{Replication}: $!P$ \\
+$!P$ - pronounced ``bang $P$'' - means $P \ | \ P \ | \ \dots$; as many copies as you wish. This process can always create a new copy of $P$. The reduction rules make it so that there is no risk of infinite concurrent activity. \\
+
+Every process in $\pi$-calculus is built from the stopped process $0$. Let's build a few simple processes.
+
+\subsubsection{A few simple processes}
+\begin{itemize}
+\item $0$ \\
+This is the simplest process, out of which all other processes are created.
+
+\item $x(y).0$ \\
+This process waits for the message $y$ on the channel $x$ and then stops.
+
+\item $\bar{x} y .0$ \\
+This process sends the message $y$ on the channel $x$ and then stops.
+
+\item $(\text{new } x)0$ \\
+This process declares a new name $x$ in the stopped process. Do you think this should correspond to a process we already have?
+
+\item $0 \ | \ 0$ \\
+The stopped process runs concurrently with the stopped process. Do you think this should correspond to a process we already have?
+
+\item $\bar{x} y .0 \ | \ x(z).0$ \\
+This process concurrently sends and receives a message on the channel $x$. This is how communication occurs.
+\end{itemize}
+
+Concurrently sending and receiving messages on the same channel allows for communication on that channel. In general, the process $\bar{x} z .Q \ | \ x(y).P$ corresponds to a communication on channel $x$. It is said that $x$ and $\bar{x}$ are in a \emph{name}/\emph{co-name} relationship.
+
+
+\subsection{Structural congruence}
+Intuitively, we expect equivalence between some of these processes. For instance, $P \ | \ 0$, $0 \ | \ P$, and $P$ should all be equivalent. Think about it. The process $P \ | \ 0$ means that we are running the process $P$ concurrently with the stopped process $0$. That shouldn't be any different than running the process $P$ by itself. In general, we denote the \emph{structural equivalence} of processes $P$ and $Q$ by $P \equiv Q$. Our intuitions are codified by the following axioms of structural equivalence.
+
+\begin{itemize}
+\item \textbf{$\alpha$-equivalence:} \\
+$P\equiv Q$ if $Q$ can be obtained from $P$ by renaming one or more names referenced in $P$ (we will discuss free and bound names in more depth later in the series). This is analogous to $\alpha$-conversion in $\lambda$-calculus. This amounts to two programs being equivalent if they only differ by the names of variables used within. They execute the same code, but maybe calls things by different names in a consistent manner.
+
+\item \textbf{Axioms for parallel composition:}
+\begin{itemize}
+\item $P \ | \ Q \equiv Q \ | \ P$ \\
+The order in which we list concurrent processes shouldn't matter because they execute at the same time. Therefore, the processes $P \ | \ Q$ and $Q \ | \ P$ are equivalent.
+
+\item $(P \ | \ Q) \ | \ R \equiv P \ | \ (Q \ | \ R)$ \\
+The par operator should be associative. We only ever talk about ``par-ing'' two processes together, so if we want to throw a third process into the mix, there are two distinct ways to do that. This equivalence says these two ways are the same because we are running these processes concurrently.
+
+\item $P \ | \ 0 \equiv P$ \\
+Running the stopped process along with another process $P$ shouldn't be any different than running $P$ alone. This equivalence says exactly that.
+\end{itemize}
+
+\item \textbf{Axioms for restriction:}
+\begin{itemize}
+\item $(\text{new } x)(\text{new } y)P \equiv (\text{new } y)(\text{new } x)P$ \\
+When declaring new names in a process, the order shouldn't matter. This equivalence captures that notion.
+
+\item $(\text{new } x)0 \equiv 0$ \\
+Declaring a new name in the stopped process shouldn't change anything. Therefore, it should be equivalent to the stopped process.
+\end{itemize}
+
+\item \textbf{Axiom for replication:} 
+\begin{itemize}
+\item $!P \equiv P \ | \ !P$ \\
+With replication of a process, we can always create a new copy of the process. Therefore, the processes $!P$ and $P \ | \ !P$ are equivalent.
+\end{itemize}
+
+\item \textbf{Axiom relating restriction and parallel:} \\
+If the name $x$ is bound in $Q$, then $(\text{new } x)(P \ | \ Q) \equiv (\text{new } x)P \ | \ Q$.
+\end{itemize}
+
+These are the properties of structural equivalence in $\pi$-calculus. Structural equivalence captures the notion of computational indistinguishably. That is, two structurally equivalent processes are identical from the point of view of computation. \\
+
+Structural congruence is an example of what is called an \emph{equivalence relation} in mathematics. We view it as computational equivalence of processes. \\
+
+We will now make the notion of communication in $\pi$-calculus precise and discuss the operational semantics.
+
+\subsection{Operational semantics i.e. reduction rules}
+Recall that the prefix $\bar{ x} y$ represents sending a message $y$ on the channel $x$, and the prefix $x(z)$ represents receiving a message $z$ on the channel $x$. The thinking is that when a send and receive on the same channel happen concurrently, communication takes place and the receiver then uses the passed information. In symbols, this is written
+\[ \bar{ x} y .P \ | \ x(z).Q \ \rightarrow \ P \ | \ Q \{ y/z \} \]
+The $\rightarrow$ is notation for ``reduces to'' and we call this the \emph{comm reduction} or \emph{comm rule}. This means that if we find two processes $\bar{x} y.P$ and $x(z).Q$ running concurrently, then $y$ is sent on channel $x$, $y$ replaces $z$ in the process $Q$, and the processes $P$ and $Q \{ y / z \}$ run concurrently. This is analogous to $\beta$-reduction in $\lambda$-calculus. It's so important, I'll write it twice.
+\begin{itemize}
+\item \textbf{Comm rule:}
+\[ \bar{ x} y.P \ | \ x(z).Q \ \rightarrow \ P \ | \ Q \{ y/z \} \]
+\end{itemize}
+
+The comm rule interacts with parallel composition, restriction, and structural equivalence.
+\begin{itemize}
+\item Parallel composition: \\
+If $P \rightarrow Q$, then $P \ | \ R \rightarrow Q \ | \ R$.
+
+\item Restriction: \\
+If $P \rightarrow Q$, then $(\text{new } x)P \rightarrow (\text{new } x)Q$.
+
+\item Structural Equivalence: \\
+If $P \equiv P'$, $Q \equiv Q'$, and $P' \rightarrow Q'$, then $P \rightarrow Q$.
+\end{itemize}
+
+We should get our feet wet with some examples.
+\subsubsection{Examples}
+\begin{enumerate}
+\item[(i)] $\bar{ x} y .0 \ | \ x(z).P \ | \ Q \ \rightarrow \ P\{ y / z \} \ | \ Q$ \\
+\emph{Proof:} The first two processes, $\bar{ x} y .0$ and $x(z).P$, will reduce under the comm rule to give us 
+\[ \bar{ x} y .0 \ | \ x(z).P \ \rightarrow \ 0 \ | \ P \{ y/z \} \]
+and we have that $0 \ | \ P \{ y/z \} \equiv P\{ y / z \}$. By the way the comm rule interacts with parallel composition, we get 
+\[ \bar{ x} y .0 \ | \ x(z).P \ | \ Q \ \rightarrow \ P\{ y / z \} \ | \ Q \]
+
+\item[(ii)] $\bar{ x} y .0 \ | \ x(u).P \ | \ x(v).Q$ \ does not reduce uniquely \\
+\emph{Proof:} We have two valid reductions as there are two possible comms that can occur. One reduction results from a comm between the first and second terms, i.e. reduces to
+\[ P\{ y / u \} \ | \ x(v).Q, \]
+and the other results from a comm between the first and third terms, i.e. reduces to
+\[ x(u).P \ | \ Q\{ y / v \} \]
+
+\item[(iii)] $(\nu x) \left( \bar{x} y .0 \ | \ x(u).P \right) \ | \ x(v).Q \ \rightarrow \ P\{  y / u \} \ | \ x(v).Q$ \\
+\emph{Proof:} The restriction of the name $x$ to the first two terms in the parallel composition results in a unique reduction in this case, as opposed to the previous example. Here the name $x$ restricted by $(\nu x)$ is distinct from the name $x$ appearing in the term $x(v).Q$. Therefore, only the first two terms comm resulting in the reduction
+\[ P\{  y / u \} \ | \ x(v).Q \]
+
+\item[(iv)] $! \bar{x} y .0 \ | \ x(u).P \ \rightarrow \ ! \bar{x} y .0 \ | \  P\{ y / u \}$ \\
+\emph{Proof:} We know that $! \bar{x} y .0 \equiv \ ! \bar{x} y .0 \ | \ \bar{x} y .0$ because replication always allows for the creation of another copy. Now we have a comm between $\bar{x} y .0$ and $x(u).P$, which we have seen reduces to $P\{ y / u \}$. Thus, we are left with 
+\[ ! \bar{x} y .0 \ | \  P\{ y / u \} \]
+\end{enumerate}
+
+To summarize, the $\pi$-calculus is a concurrent model of computation based on the notion of naming, in which we represent interactions between agents as message-passing. This message-passing occurs when we have concurrent send and receive processes on the same channel. In $\pi$-calculus, we make a distinction between names and processes and we have the option to run computations concurrently. These are the major differences with $\lambda$-calculus. \\
+
+To see the full version of $\pi$-calculus, see [1]. We have not discussed the choice operator and normal processes because our intention in introducing $\pi$-calculus was to investigate concurrency and how that is dealt with in a grammar. \\
+
+The goals of this computational calculi primer series are to introduce $\rho$-calculus and set the foundation for the DoCC lectures. We will achieve both of these goals with next the article.
+
+\subsection{References}
+\begin{enumerate}
+\item Robin Milner, \emph{The Polyadic $\pi$-Calculus: a Tutorial} \\
+
+\end{enumerate}
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
