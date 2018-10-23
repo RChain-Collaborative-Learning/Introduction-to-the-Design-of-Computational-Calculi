@@ -1,0 +1,333 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Computational Calculus Primer Part 3: Rho calculus}
+
+\maketitle
+
+\subsection{Overview}
+We saw in the previous post that $\pi$-calculus is a process calculus which is dependent on a theory of names; it is therefore said that it is not a closed theory. The $\rho$-calculus is an asynchronous message-passing calculus built on a notion of quoting; it is a closed theory, as the theory of names is wholly determined by the theory of processes. The name $\rho$-calculus or RHO-calculus is an acronym for \emph{reflective, higher-order calculus}. By reflective, we mean there is a mechanism for switching between names and processes (quote/dereference, see below). By higher-order, we mean that the resulting laguage is very expressive.
+
+This is the last post in the primer series. The upcoming posts will follow the DoCC lectures.
+
+\section{Rho calculus}
+Coming from $\pi$-calculus, $\rho$-calculus can seem a little like stepping into the twilight zone. In $\pi$-calculus, names and process were two distinct dichotomies. However, in $\rho$-calculus, we have constructors for turning a process into a name and vice versa. The thinking is that processes are programs and since names are quoted processes, names represent the code of a process. Therefore, one can run a process, i.e. execute the program, quote the process to bundle up its code, send the code to another channel, and dereference the code to get a running instance of the program.
+
+As in $\pi$-calculus, in $\rho$-calculus we represent interaction between agents by message-passing.
+
+\subsection{Grammar}
+The BNF presentation of a grammar for $\rho$-calculus, written in the style of Rholang,
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+has several similarities with $\pi$-calculus. The stopped process, send, receive, and parallel composition all have analogues in $\rho$-calculus. However, it is the differences that set it apart. The ability to quote a process into a name and deference a name into a process enhances the expressivity of the $\rho$-calculus.
+
+\begin{itemize}
+\item The stopped process: 0
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+This is the atomic process that means ``do nothing''. All of the terms in the $\rho$-calculus are built from this special process in a similar way to how the terms in the $\lambda$-calculus and $\pi$-calculus are built from names. The main difference being that we no longer require a set of names to get the ball rolling with our term formation. The stopped process is enough to do the job.
+
+\item For-comprehension: $\text{for}( y \leftarrow x)P$
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+This process is similar to an input-guarded continuation, $x(y).P$, in $\pi$-calculus. This process waits to receive a message on channel $x$, then the process $P$ will run with the received name substituted for the name $y$. See the comm rule below. \\
+
+\item Send on a channel $x$: $x!(P)$
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+The quoted process $@P$ is sent on the channel $x$. This is analogous to output prefixing, $\bar{x} \langle y \rangle.P$, in $\pi$-calculus, except now we can reinstate our messages as processes using dereference. \\
+
+\item Parallel composition of processes: $P \ | \ Q$
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+The processes $P$ and $Q$ run concurrently, exactly as in $\pi$-calculus. \\
+
+\item Dereference (``name drop'') or dequote: ${}^*x$
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+${}^*x$ - read ``drop $x$'' - allows us to turn a name back into its underlying process (since each name is a quoted process). To turn the name $@P$ into its underlying process, derefernce it. \\
+
+\item Names are quoted processes: $@P$
+\[ P, Q \ ::= \ 0 \ | \ \text{for}( y \leftarrow x)P \ | \ x!(P) \ | \ P | Q \ | \ {}^* x \]
+\[ x, y \ ::= \ @P \]
+Every name is a quoted process. The idea is that names are computer code and processes are computer programs; code is static, programs execute. Given a program (process), we can write down its code (quote it), and once we have the code (name is a quoted process), we can execute the program (dereference it). Therefore, we will take the process ${}^*@P$ to be the same as the process $P$. This is a consequence of our \emph{semantic substitution}.
+\end{itemize}
+
+We are given the stopped process, $0$, to start with. Out of this process alone, we construct all names and processes in $\rho$-calculus.
+
+Let's build several simple $\rho$-calculus processes before moving on to structural congruence, other notions of equivalence, syntactic and semantic substitutions, and operational semantics.
+\begin{itemize}
+\item 0 \\
+This is the simplest process. Nothing happens.
+
+\item ${}^*0$ \\
+This is \emph{not} proper syntax - only names can be dereferenced and $0$ is a process, not a name. This is not a valid $\rho$-calculus process!
+
+\item $0 \ | \ 0$ \\
+This is arguably the second simplest process; it concurrently runs the stopped process with itself. Should we be able to simplify this  process?
+
+\item ${}^*@0$ \\
+Since $0$ is the simplest process, $@0$ is the simplest name. This process dequotes the name $@0$. Should we be able to simplify this  process?
+
+\item $@(0 \ | \ 0)!(0)$ \\
+Since $0 \ | \ 0$ is a process, $@(0 \ | \ 0)$ is a name which provides a channel to send messages on. This process sends the message $@0$ on the channel $@(0 \ | \ 0)$.
+
+\item $\text{for}( @(0 \ | \ 0) \leftarrow @0)0$ \\
+This process waits for a message on the channel $@0$. When it is received, it substitutes the received name for $@(0 \ | \ 0)$ in the process $0$.
+
+\item $@0!(0) \ | \ \text{for}( @0 \leftarrow @0)0$ \\
+This process concurrently sends and receives the message $@0$ on the channel $@0$. Just like in $\pi$-calculus, this will result in a communication!
+
+\item $@(@0!(0))!(0)$ \\
+Since $@0!(0)$ is a process, we can quote it to form the name $@(@0!(0))$ which gives us another channel to send messages on. This process sends the name $@0$ on the channel $@(@0!(0))$.
+
+\item $\text{for}( @0 \leftarrow @(0 \ | \ 0))@0!(0)$ \\
+This process waits for a message on the channel $@(0 \ | \ 0)$ to substitute for the name $@0$ in the process $@0!(0)$.
+\end{itemize}
+
+Now we will discuss the different notions of equivalence in $\rho$-calculus.
+
+\subsection{Notions of equivalence}
+
+\subsubsection{Structural congruence}
+Just like in $\pi$-calculus, we expect some of the processes to be equivalent from the viewpoint of computation. Again, this equivalence, denoted by $\equiv$, is called \emph{structural congruence}. This is the least equivalence, containing $\alpha$-equivalence that satisfies the following laws
+\begin{itemize}
+\item $P \ | \ 0 \equiv P$
+
+\item $P \ | \ Q \equiv Q \ | \ P$
+
+\item $(P \ | \ Q) \ | \ R \equiv P \ | \ (Q \ | \ R)$
+\end{itemize}
+
+Structural congruence only pertains to processes.
+
+\subsubsection{Name equivalence}
+\emph{Name equivalence}, denoted by $\equiv_N$, has two instantiations pertaining to (i) a single name and (ii) structurally congruent processes:
+\begin{enumerate}
+\item[(i)] $@({}^*x) \equiv_N x$ \\
+This equivalence says quoting a dereferenced name is name equivalent to the name itself. The thinking is that if we turn some code into a program and turn that program into its code, then we should reproduce the original code.
+
+\item[(ii)] If $P \equiv Q$, then $@P \equiv_N @Q$. \\
+This equivalence says that structurally congruent processes, $P$ and $Q$, have name equivalent quotations, $@P$ and $@Q$. The idea is that two programs which have equivalent execution also have equivalent code.
+\end{enumerate}
+
+\subsubsection{$\alpha$-equivalence}
+Recall the concept of $\alpha$-conversion in $\lambda$-calculus. It said two terms were equivalent if they only differ by their bound names, i.e. they only differ by what we call the variables in the term. There is an analogous concept called \emph{$\alpha$-equivalence}, denoted by $\equiv_{\alpha}$, in $\rho$-calculus (and also $\pi$-calculus). Two $\rho$-calculus processes are called $\alpha$-equivalent if they differ only by what they call the names they reference. That is, $P \equiv_{\alpha} Q$ if $P$ and $Q$ only differ by the names used to construct these processes. A few examples of $\alpha$-equivalent processes
+\[ x!(0) \equiv_{\alpha} y!(0), \]
+\[ P \ | \ \text{for}(y \leftarrow x)0 \equiv_{\alpha} P \ | \ \text{for}(w \leftarrow u)0 \] 
+Two $\alpha$-equivalent processes have the same code so they both represent the same program.
+
+\subsection{Substitutions \& operational semantics}
+As in other computational calculi, we have rules for substitutions and what these substitutions mean in terms of computation. We will denote the substitution of the name $y$ for the name $x$ within the process $P$ by $(P)\{ y / x \}$.
+
+\subsubsection{Syntactic substitution} 
+The rules for \emph{syntactic substitutions} dictate how the usual substitution of names translates to that of processes (because processes are built from 0 and names). On the level of names, substitution is straight forward, but we must build the concept of name substitution in a process. Thus, we have a rule for each term constructor. The rules for name substitution in processes are built from:
+\begin{itemize}
+\item $\displaystyle (0)\{ @Q / @P \}=0$ \\
+Any substitution of names in the stopped process does not change the stopped process;
+
+\item $\displaystyle (!R)\{ @Q / @P \}=!(R)\{ @Q / @P \}$ \\
+There is only one process to do substitution with in replication and it proceeds in the obvious way;
+
+\item $\displaystyle (R \ | \ S)\{ @Q / @P \}=(R)\{ @Q / @P \} \ | \ (S)\{ @Q / @P \}$ \\
+Substitution in processes running in parallel is just substitution in each process separately and then we run these new processes in parallel;
+
+\item $\displaystyle (x!(R))\{ @Q / @P \}= (x)\{ @Q / @P \}!((R)\{ @Q / @P \})$ \\
+Substitution in a send works as expected. First, we do the appropriate substitution with channel name $x$; this explains the appearance of $(x)\{ @Q / @P \}$. Then, we do the appropriate substitution with the process $R$; this explains the appearance of $(R)\{ @Q / @P \}$;
+
+\item $\displaystyle (\text{for}(y \leftarrow x)R)\{ @Q / @P \}= \text{for}(z \leftarrow (x)\{ @Q / @P \})((R)\{ z / y \})\{ @Q / @P \}$ \\
+This rule looks very complicated so let's unravel it. First, we do a name substitution with the receiving channel $x$; this explains the appearance of $(x)\{ @Q / @P \}$ within the for-comprehension. Then, we call the message we're waiting for, $y$, by a different name, $z$. Since we switched this label, we must substitute $z$ for every appearance of $y$ in the process $R$; this explains the appearance of $(R)\{ z / y \}$. Ultimately, we need to do the name substitution within the process $(R)\{ z / y \}$; this explains the appearance of $((R)\{ z / y \})\{ @Q / @P \}$;
+
+\item $\displaystyle ({}^*x)\{ @Q / @P \}=\begin{cases} 
+      {}^*@Q & \text{if } x \equiv_N @P \\
+      {}^*x & \text{otherwise} 
+   \end{cases}$ \\
+Substitution with a dereferenced name is straight forward. If the name $x$ is name equivalent to $@P$, then we do the expected substitution, i.e. $@Q$ is substituted for $x$. If $x$ is not name equivalent to $@P$, nothing changes; \\
+
+The usual name substitution is given by
+
+\[ (x)\{ @Q / @P \}= \begin{cases} 
+      @Q & \text{if } x \equiv_N @P \\
+      x & \text{otherwise} 
+   \end{cases} \]
+\end{itemize}
+In $\rho$-calculus, we must also take name equivalence into consideration. So we perform the substitution for any name equivalent name too.
+
+These syntactic substitution rules tell us how to write down the substitutions for processes, but they do not necessarily tell us what these substitutions mean in terms of computation. This is where the semantic substitution comes in.
+
+\subsubsection{Semantic substitution}
+Some real special sauce comes from the notion of \emph{semantic substitution}. We have discussed quoting processes and dereferencing names, how quoting a process results in a name, and how dereferencing a name results in a process, but we have not explicitly connected the two ideas. \\
+
+Formally speaking, we have the rule
+\[ ({}^*x) \{ @Q / @P \} = \begin{cases} 
+      Q & \text{if } x \equiv_N @P \\
+      {}^*x & \text{otherwise} 
+   \end{cases} \]
+which says that if we substitute the name $@Q$ for the name $@P$ in the dereference process ${}^*x$, then we get the process $Q$ if $x$ is name equivalent to $@P$, and just ignore the substitution altogether if $x$ is not name equivalent to $@P$.
+
+\begin{center}
+The takeaway is that after all substitutions are done, ${}^*@P=P$ for every process $P$.
+\end{center}
+
+This is exactly what we need to happen to ensure that we can think about processes as programs and names as code. We want to be able to take a program (process), write down its code (quote the process), then run the code as a program (dereference the quoted process) and get back the original program (process). The semantic substitution brings this all together.
+
+\subsubsection{Operational semantics}
+We also have the notion of a \emph{comm event} in $\rho$-calculus. The idea is that we have communication when we concurrently send and receive on the same channel. Communication is the reduction of a process of the form
+\[ x!(Q) \ | \ \text{for}(y \leftarrow x)P \ \rightarrow (P)\{ @Q / y \}. \]
+We extend this notion of communication using name equivalence. This amounts to communication being generalized to the concurrent sending and receiving of messages on name equivalent channels.
+\begin{itemize}
+\item \textbf{Comm rule:} \begin{center} $\displaystyle \frac{x_0 \equiv_N x_1}{x_0!(Q) \ | \ \text{for }(y \leftarrow x_1)P \rightarrow (P)\{ @Q / y \} }$ \end{center}
+This rule says that the concurrent send, $x_0!(Q)$, and receive, $\text{for }(y \leftarrow x_1)P$, on name equivalent channels, $x_0$ and $x_1$, reduces to the atomic process, $(P)\{ @Q / y \}$. The communication rule makes it possible for agents to synchronize and communicate processes packaged as names.
+\end{itemize}
+
+The comm rule interacts with parallel composition and structural congruence just like it does in $\pi$-calculus:
+
+\begin{itemize}
+\item \emph{Parallel composition:} $\displaystyle \frac{P \rightarrow P'}{P \ | \ Q \rightarrow P' \ | \ Q}$ \\
+This rule says that if a process $P$ reduces to the process $P'$, then the process $P \ | \ Q$ will reduce to the process $P' \ | \ Q$.
+
+\item \emph{Structural congruence:} $\displaystyle \frac{P \equiv P', \ P' \rightarrow Q', \ Q' \equiv Q}{P \rightarrow Q}$ \\
+This rule says that if we have a process $P$ which is structurally congruent to the process $P'$, a process $Q$ which is structurally congruent to the process $Q'$, and the process $P'$ reduces to the process $Q'$, then the process $P$ reduces to the process $Q$.
+\end{itemize}
+
+It's time for a few examples of reduction.
+
+\subsubsection{Examples}
+\begin{enumerate}
+\item $@0!(0) \ | \ \text{for}( @(@0!(0)) \leftarrow @0)0 \ \rightarrow \ 0$ \\
+The send, $@0!(0)$, and receive, $\text{for}( @0 \leftarrow @0)0$, processes run concurrently on the same channel, $@0$. Thus, a comm event occurs and this process reduces to the substitution
+\[ (0)\{ @0 / @(@0!(0)) \}. \]
+Recall that $(0)\{ z / y \}=0$ for any names $y$, $z$, thus the process ultimately simplifies to the stopped process $0$.
+
+\item $\text{for}( @0 \leftarrow x)@0!(0) \ | \ x!(@0!(0)) \ \rightarrow \ @(@0!(0))!(0)$ \\
+First, we notice that we are sending and receiving messages on the same channel $x$ so communication occurs. To simplify matters, let's make $P=@0!(0)$ and $Q=@0!(0)$ so the process we are dealing with can be written
+\[ \text{for}( @0 \leftarrow x)P \ | \ x!(Q). \]
+Using the comm rule (here $y=@0$), this reduces to
+\[ (P)\{ @Q / @0 \}. \]
+Using the definitions of $P$ and $Q$, we have
+\[  (@0!(0))\{ @(@0!(0)) / @0 \} \]
+and using the syntactic substitution rule for a send process, we substitute in the name and the process, to get
+\[ (@0)\{ @(@0!(0)) / @0 \}!((0)\{ @(@0!(0)) / @0 \}). \]
+Again using the rules of syntactic substitution, the expression simplifies to
+\[ @(@0!(0))!(0). \]
+Therefore, the original process ultimately reduces to a send of $@0$ on the channel $@(@0!(0))$.
+
+\item $\displaystyle \text{for}(@0 \leftarrow @(@0!(0)))^*(@0) \ | \ @(@0!(0))!(!(@0!(0))) \ \rightarrow \ \ !(@0!(0))$ \\
+First, let's pin down exactly what is going on here. There are two processes running concurrently, the receive process, $\text{for}(@0 \leftarrow @(@0!(0)))^*(@0)$, and the send process, $@(@0!(0))!(!(@0!(0)))$. To simplify matters, let's call $y=@0$, $P={}^*y$, $Q=y!(0)$, $x=@Q$, and $R=!Q$. Now we rewrite the original process as
+\[ \text{for}( y \leftarrow x)P \ | \ x!(R). \]
+In this format, we clearly see that a comm event occurs; the process reduces to
+\[ (P)\{ @R / y \}. \]
+Going back to the definitions of $P$ and $Q$, we have
+\[ ({}^*y)\{ @R / y \}. \]
+By the semantic substitution rule for dereferencing, this substitution simplifies to the process $R$, which is just
+\[ !(@0!(0)), \]
+replication of sending the message $@0$ on the channel $@0$.
+\end{enumerate}
+
+\subsubsection{References}
+\begin{enumerate}
+\item Meredith, Radestock (2005). \emph{A Reflective Higher-Order Calculus}. Retrieved June 16, 2018.
+\end{enumerate}
+
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
