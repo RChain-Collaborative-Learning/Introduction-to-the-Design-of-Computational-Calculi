@@ -1,0 +1,231 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Introduction to Design of Computational Calculi 1: Mathematical Models of Grammar}
+
+\maketitle
+
+\subsection{Overview}
+This series of posts will follow Greg Meredith's Introduction to the Design of Computational Calculi (DoCC) lectures and attempt to explain the information covered. Go here to watch the \href{https://www.youtube.com/watch?v=50z-TP0_HEA&list=PLf2bbiic5ZjD3q67melAFj8UWUFZy4PKP}{first video}.
+
+To design computational calculi for specific applications, we must first understand what constitutes a computational calculus. The RhoVM is based on the concurrent computational calculus known as the reflective, higher-order calculus, or $\rho$-calculus for short. We will investigate the $\rho$-calculus and its connection to Rholang along with more classical examples of computational calculi in this series. The foundational example being that of the $\lambda$-calculus, which we will discuss in detail. This is not intended to be a thorough investigation so much as a concerted effort to convey a clear picture of what's going on with computational calculi and how they apply to blockchain technology.
+
+To study computational calculi, we will first consider mathematical models of grammar. We discuss mathematical models for the grammar of $\lambda$-calculus and $\rho$-calculus in this post. Preliminary material about \href{https://blog.rchain.coop/computational-calculi-primer/}{$\lambda$-calculus}, \href{https://blog.rchain.coop/calculus-primer-\%cf\%80-calculus/}{$\pi$-calculus}, and \href{https://blog.rchain.coop/calculus-primer-\%cf\%81-calculus/}{$\rho$-calculus} can be revisited by following the appropriate link.
+
+\section{Mathematical models of grammar}
+We have seen in the primer series that the presentation of a computational calculus requires:
+\begin{enumerate}
+\item Grammar: rules for creating terms
+
+\item Structural equivalence: notion of equivalence of terms
+
+\item Operational semantics: notion of computation
+\end{enumerate}
+
+We will talk a little bit about how calculi relate to other mathematical and computational structures. Specifically, we will discuss how a presentation like this sets up a structure/function relationship which is a biological idea.
+
+The grammar of a computational calculus lives inside the \href{https://blog.rchain.coop/computational-calculi-primer/}{BNF presentation}. BNF grammars are the tool of choice when writing a parser. Within the Chomsky hierarchy, BNF grammars are essentially equivalent to context-free grammars. This gives us a way to describe structural relationships, how to build data types. The BNF grammar is the structure of our domain of discourse and tells us how the things we will use to compute with are built.
+
+BNF grammars are self-referential, terms are built from terms recursively.
+
+\subsection{Lambda calculus}
+The $\lambda$-calculus models the notion of a function. Within $\lambda$-calculus, we have a first-class notion of function and pass functions around like values. This is a powerful and appealing notion for programming languages; use functions as inputs and outputs.
+
+The grammar discussed in this series will always be presented in Baukus-Naur form (BNF) which is typical for programming languages. BNF is just a fancy way of describing how the rules for the syntax work in a grammar, i.e. what ``admissible'' terms look like. As an example, here is the BNF presentation of $\lambda$-calculus:
+\begin{equation} \label{bnfl}
+M, N ::= \ x \ | \ \lambda x.M \ | \ M N
+\end{equation}
+There are \emph{three} term constructors which correspond to three different rules for constructing terms. This presentation gives rise to a \emph{language}, the collection of $\lambda$-terms. Our language consists of terms $M$ and $N$ which are of the form $x$ or $\lambda x. M$ or $M N$ or some admissible combination of these. Terms are built recursively.
+
+We will always think of terms as a computer program. Only admissible terms will represent programs that compile. Hence, $x$ alone does not compile, but $\lambda x.x$ does.
+
+We may generate terms from by using the constructors in the BNF presentation or we may be given a term and check whether it is a $\lambda$-term by deconstructing it.
+
+Recall that $x$ is just a \emph{name} or \emph{variable} which is supplied to us in a set $X$ and that this grammar is \emph{parametric} in the set of variables $X$. So we write
+\[ M[X] ::= \ X \ | \ \lambda X.M[X] \ | \ M[X] \  M[X] \]
+to emphasize the dependence of the admissible terms $M[X]$ on $X$.
+
+There is only one \emph{type} in $\lambda$-calculus: the $\lambda$-term.
+
+\subsubsection{Mathematical model}
+With mysterious objects, like the BNF grammar, it can be helpful to make a mathematical model.
+
+Since $\lambda$-terms have three basic forms ($x$ from the set $X$, $\lambda x. M$ where $x \in X$ and $M$ is any $\lambda$-term, and $M N$ where $M$ and $N$ are any $\lambda$-terms), the \emph{domain equation} for $\lambda$-calculus has three terms, each corresponding to one of these basic forms. 
+
+Let's denote the set of all $\lambda$-terms by $M[X]$. Now to get a variable $x$, we simply choose one from the set $X$, i.e. we only need the set $X$. To form an abstraction $\lambda x. M$, we need a variable from $X$ and a term from $M[X]$, i.e. we need the set $X \times M[X]$ (\emph{pairs} of elements from $X$ and $M[X]$), where
+\[ A \times B = \{ (a,b) : \ a \in A, b \in B \} \]
+is called the \emph{direct product} of the sets $A$ and $B$. To get a term like $M N$, we need two $\lambda$-terms $M$ and $N$ (both from $M[X]$), i.e. we need the set $M[X] \times M[X]$ (pairs of elements from $M[X]$). From all of this, we get the following equation describing the language emerging from this grammar
+\begin{equation} \label{doml}
+M[X] = X + (X \times M[X]) + (M[X] \times M[X])
+\end{equation}
+which we call the \emph{domain equation}. Essentially, this just says that the $\lambda$-terms are formed from mentioning variables (which depends only on $X$), abstractions of a variable and a $\lambda$-term (which depends on $X \times M[X]$), and applications of two $\lambda$-terms (which depends on $M[X] \times M[X]$).
+
+The domain equation can be interpreted in terms of sets with recursion or categories. For now, we interpret the collection of $\lambda$-terms as a set $M[X]$ which satisfies the domain equation \eqref{doml}. There is a bit of subtlety present, let me explain. The $+$ operation in the domain equation is not ordinary addition. We are dealing with sets so, here, $+$ means \emph{disjoint union}. We take the union of sets and treat all elements as distinct. We think of each element as being tagged by the set it's a member of.
+
+For example, we can think of the disjoint union, $A+B$, of the sets $A=\{ a, b, c \}$ and $B=\{ a, d \}$, as first, tagging the elements of $A$ and $B$
+\[ A'=\{ a_A, b_A, c_A \}, \ \ B'=\{ a_B, d_B \},\]
+then taking the union of the tagged elements $A' \cup B'=\{ a_A, b_A, c_A , a_B, d_B \}=A+B$. On the other hand, the ordinary union is $A \cup B=\{ a, b, c, d \}$. No distinction is made between the element $a$ coming from the set $A$ and the one from $B$. The point of the disjoint union is that all elements are treated as distinct and thus no elements are discarded due to repetition.
+
+The use of tagging elements in the disjoint union is synonymous with case classes in Scala. We can use our mathematical model to get a computational interpretation in Scala. We use the object-oriented features to model the features of the grammar.
+
+Terms appearing on the left-hand side of the BNF presentation \eqref{bnfl} are called \emph{non-terminal} symbols and terms only appearing on the right-hand side are called \emph{terminal} symbols. All of the elements are effectively an extension of a single, overarching trait. This trait is a type, $M[X]$, which is parametric in another type $X$. If we are given a variable, of type $X$, then we can form a new type, $M[X]$.
+
+Scala allows us to create case classes to disambiguate terms just like with the disjoint union. In Scala, we define the trait $M[X]$ with three case classes:  \\
+
+\indent trait $M[X]$ \\
+\indent case class Mention[$X$]( $x : X$ ) extends $M[X]$ \\
+\indent case class Abstraction[$X$]( $x : X$, $m : M[X]$ ) extends $M[X]$ \\
+\indent case class Application[$X$]( $m : M[X]$, $n : M[X]$ ) \\
+
+It is interesting to note that equation \eqref{doml} may be taken literally with $X$ being treated as a constant and $M[X]$ as a variable which we will even differentiate with respect to! But we will save that discussion for a future post.
+
+Now we continue on to discuss the grammar underlying Rholang and RChain.
+
+\subsection{Rho calculus}
+
+\subsubsection{Mathematical model}
+Recall the BNF presentation of a grammar for \href{https://blog.rchain.coop/calculus-primer-\%cf\%81-calculus/}{$\rho$-calculus}
+\begin{equation} \label{bnfr}
+\begin{split}
+P,Q &::= \ 0 \ | \ \text{for}(y \leftarrow x)P \ | \ x!(Q) \ | \ P|Q \ | \ {}^*x \\
+x,y &::= \ @P
+\end{split}
+\end{equation}
+Let $P[X]$ denote the admissible terms in this grammar generated from the set of names $X$, i.e. using only the first set of production rules, forgetting about reflection. Denote the collection of all $\rho$-calculus processes by $R$, i.e. using reflection. The grammar has the domain equation
+\begin{equation} \label{domr}
+\begin{split}
+P[X] &= 1 + (X \times X \times P[X]) + (X \times P[X]) + (P[X] \times P[X]) + X \\
+R &= P[R]
+\end{split}
+\end{equation}
+which is actually \emph{not} parametric in the set of names $X$ because of the recursion present in the second equation, which is called ``tying the recursive knot''. Let's walk through the construction of \eqref{domr} from the productions in \eqref{bnfr}.
+
+\begin{itemize}
+\item $0$ \\
+The stopped process is a single process, hence it gives rise to a set with a single element denoted by $1$. Category theoretically, $1$ is the initial object in the category.
+
+\item $\text{for}(y \leftarrow x)P$ \\
+A receive requires two names $x, y \in X$ and a process $P \in P[X]$. Hence, we need to the set $X \times X \times P[X]$.
+
+\item $x!(Q)$ \\
+A send requires a name $x \in X$ and a process $P \in P[X]$. Hence, we need to include the set $X \times P[X]$.
+
+\item $P|Q$ \\
+Parallel composition requires two processes $P, Q \in P[X]$. Hence, we need to include the set $P[X] \times P[X]$
+
+\item ${}^*x$ \\
+A dereference requires only one name $x \in X$. Hence, we also need to include the set $X$ in the domain equation.
+
+\item $x ::= @P$ \\
+This part of the grammar arguably makes the most important contribution to the domain equation. It simply says that names are quoted processes. This means that to get the name $@P$, we require a process $P \in P[X]$. Notice the self-reference here; this is the \emph{reflective} part of $\rho$-calculus. The equation $R=P[R]$ says that the set of $\rho$-calculus processes, $R$, is the recursive fixed point of the first equation, i.e. $R$ is the set of processes generated over the set of quoted processes.
+\end{itemize}
+
+Notice in the BNF presentation \eqref{bnfr} that there are two separate definitions present. The reason is because there are two \emph{types} in $\rho$-calculus: processes and names. There are no variables present, hence this is a kind of machine code which means that we can directly encode processes as numbers to get a binary representation for each process in $\rho$-calculus.
+
+\subsubsection{Summary}
+The BNF presentation of a grammar gives rise to a mathematical model via the domain equation which can be interpreted as a set with recursion or a category. We constructed the domain equations for grammars for $\lambda$-calculus and $\rho$-calculus.
+
+In the next post, we will discuss free and bound names and equivalence of processes.
+
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
