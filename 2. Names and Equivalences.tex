@@ -1,0 +1,237 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Introduction to Design of Computational Calculi 2: Names, Compilable Programs, and Equivalences}
+
+\maketitle
+
+\subsection{Overview}
+We discuss the role of names and binding and the different notions of equivalence in our examples of computational calculi. Keeping in mind that the goal of these lectures is to be able to design computational calculi with desired properties, we discuss these ideas generally, yet within the framework of our examples.
+
+\subsection{Process calculi}
+The distinguishing feature of a mobile process calculus is that the agents perform computation solely by passing messages. This is quite different from $\lambda$-calculus, where computation is performed by manipulation of a shared set of variables.
+
+There are two types of process calculi: synchronous and asynchronous. The distinguishing feature being that in an asynchronous process calculus, we may never know if a sent message is received, i.e. we do not have a notion of synchronization. The variant of Robin Milner's $\pi$-calculus presented in the \href{https://blog.rchain.coop/calculus-primer-\%cf\%80-calculus/}{primer} is synchronous, but can be made asynchronous. Other asynchronous process calculi include ambient calculus, blue calculus, join-calculus, and $\rho$-calculus.
+
+%Linear $\lambda$-calculus, Samson Abramsky: variables only used once \\
+
+\subsection{Presentation of a collection}
+In previous posts, we discussed how the BNF grammar acts as a recipe for both recognizing terms of the language and creating terms in the language. There are two distinct ways of presenting a collection of objects, such as the terms of a calculus: extensional and intensional.
+
+An \emph{extensional} presentation of a collection explicitly lists the elements. For example, an extensional presentation of the natural numbers is given by $\{0, 1, 2, 3, 4, ... \}$. However, if we are dealing with very large collections, possibly infinite, an extensional presentation may be awkward or even worse, impossible.
+
+An \emph{intensional} presentation of a collection implicitly defines the collection by inclusion based on satisfaction of a property. For example, we have the intensional presentation of the odd integers 
+\[ \{ n \in \mathbb{Z}: n=2k+1 \text{ for some } k \in \mathbb{Z} \}. \]
+This simply says that given an integer $n$, we can test to see if it is odd by trying to find an integer $k$ satisfying the relationship $n=2k+1$. If such an integer $k$ exists, then $n$ belongs to the collection of odd integers, and if not, then $n$ is not an odd integer.
+
+We may use a one-line Haskell program to generate the natural numbers by utilizing an intensional presentation. An intensional presentation exploits information theoretic regularities in the collection to present it in a succinct way.
+
+In the context of computational calculi, the grammar is an intensional presentation of the terms in the language. The grammar provides constraints, but terms are freely generated, i.e. they can be comprised of arbitrarily many sub-terms.
+
+\section{Names and equivalences}
+Since names play a prominent role in process calculi, providing channels to send messages on and the messages themselves in some cases, and all computation is done through message-passing, we must analyze the names in our calculi more closely. We will start with the definition of free names in $\lambda$-calculus to help build our intuition about $\rho$-calculus.
+
+\subsection{Free and bound names in lambda calculus}
+Recall that there are three term constructors in $\lambda$-calculus; $x$ (\emph{mention}), $\lambda x. M$ (\emph{abstraction}), $(M N)$ (\emph{application}). We single out abstraction because the term $\lambda x.M$ \emph{binds} $x$ \emph{in} $M$ or more generally, $\lambda$ is a \emph{binder}, it marks $x$ as a variable in $M$. Using this abstraction, it now becomes possible to substitute something for $x$ in $M$, this is of course done via $\beta$-reduction. Since all $\lambda$-terms are ultimately built from names and some names are bound by abstraction, we would like to make formal the notion of bound and free names in a $\lambda$-term. We define the \emph{free} names, $\mathcal{FN}(M)$, of a $\lambda$-term, $M$, recursively by defining the free names for each term constructor in $\lambda$-calculus:
+\begin{itemize}
+\item $\mathcal{FN}(x) = \{ x \}$ \\
+The only free name in a mention is the name mentioned.
+
+\item $\mathcal{FN}(\lambda x.M) = \mathcal{FN}(M) \setminus \{ x \} = \{ n \in \mathcal{FN}(M): n \neq x \}$ \\
+Abstractions turn free names into bound names, hence the abstracted name $x$ is discarded from the set of free names in the abstracted term $M$. This is the general action of a binder.\\
+(For those not familiar with the set minus notation $A \setminus B$, it simply means discard the elements of $B$ from $A$.)
+
+\item $\mathcal{FN}((M N)) = \mathcal{FN}(M) \cup \mathcal{FN}(N)$ \\
+The free names in an application are the union of the free names in the terms being applied.
+\end{itemize}
+
+Further, we let $\mathcal{N}(M)$ denote the collection of names mentioned in the term $M$. A name $x$ in $M$, $x \in \mathcal{N}(M)$, is called \emph{bound} if it is not free. Denoting the collection of bound names in $M$ by $\mathcal{BN}(M)$, we have the relationship
+\[ \mathcal{N}(M)= \mathcal{BN}(M)\cup \mathcal{FN}(M) \]
+where this is, in fact, a disjoint union (why?).
+
+A \emph{closed term} is a term with no free names, i.e. $M$ is a closed term if and only if $\mathcal{FN}(M)=\emptyset$ where $\emptyset=\{ \}$ denotes the empty set, the set containing no elements. Closed terms correspond to compilable programs. There is also a notion of a name being fresh in a term. To say that a name $x$ is \emph{fresh} in a term $M$ simply means that $x \notin \mathcal{N}(M)$. Therefore abstraction of the name $x$ has no effect on $M$.
+
+\subsubsection{Examples}
+\begin{itemize}
+\item[(i)] $\lambda x. x$ is a closed term and $\mathcal{N}(\lambda x. x)=\{ x \}$ \\
+This should be obvious considering that we are abstracting the only name mentioned. Nonetheless, we do the computation carefully using the above rules to verify our intuition.
+\[ \mathcal{FN}(\lambda x. x) = \mathcal{FN}(x) \setminus \{ x \} = \{x \} \setminus \{ x \} = \emptyset \]
+
+\item[(ii)] $\lambda x. \lambda y. x$ is a closed term and $\mathcal{N}(\lambda x. \lambda y. x)=\{ x \}$ \\
+Again, we have abstracted the only name mentioned $x$, but now we also have an additional abstraction of a fresh name $y$. The term is still closed since
+\[ \mathcal{FN}(\lambda x. \lambda y. x) = \mathcal{FN}(\lambda y. x) \setminus \{ x \} = (\mathcal{FN}(x) \setminus \{ y \} ) \setminus \{ x \} = (\{ x \} \setminus \{ y \}) \setminus \{ x \} = \{x \} \setminus \{ x \} = \emptyset \]
+
+\item[(iii)] $\lambda x.(x \ y)$ is not a closed term; $\mathcal{FN}(\lambda x. (x y)) = \{ y \}$ and $\mathcal{N}(\lambda x. (x \ y))=\{ x, y \}$ \\
+This is straightforward considering that two names, $x, y$, are mentioned in the term, but only one, $x$, is bound by abstraction. Explicit calculation shows
+\[ \mathcal{FN}(\lambda x. (x \ y)) = \mathcal{FN}((x \ y)) \setminus \{ x \} = \mathcal{FN}(x) \cup \mathcal{FN}(y) \setminus \{x \} = \{x \} \cup \{y \} \setminus \{x \} = \{ x, y \} \setminus \{ x \} = \{ y \} \]
+\end{itemize}
+
+Let's discuss how these free and bound names effect the terms.
+
+\subsection{Alpha equivalence}
+For a free name $x \in \mathcal{FN}(M)$, subsequent abstraction (binding) and substitution of a fresh name $y$ in $M$ results in the $\alpha$-conversion
+\[ \lambda x.M \rightarrow_{\alpha} \lambda y.M \{ y/x \} \]
+Two terms $M, N$ are called $\alpha$-equivalent, denoted by $M \equiv_{\alpha} N$, if one $\alpha$-converts to the other.
+
+\begin{itemize}
+\item $\alpha$-equivalence erases obvious syntactic distinctions which make no difference for computation, i.e. different names are used for variables, but the programs do the same thing.
+
+\item Semantic equivalence for syntactic distinctions. The symbols in the terms are literally different, but the same meaning is given to the terms. This is the distinction between \emph{sense} and \emph{denotation}; what is written and what is meant by what is written.
+\end{itemize}
+
+Introducing binding operators into a computational model shifts it from being an algebra to a calculus because we may then define a notion of \emph{reduction}, i.e. $\beta$-reduction in $\lambda$-calculus and the \emph{comm rule} in $\pi$-calculus and $\rho$-calculus. \\
+
+Now we switch our focus to $\rho$-calculus.
+
+\subsection{Free and bound names in rho calculus}
+In $\rho$-calculus, we also define the free names, $\mathcal{FN}(P)$, in a process, $P$, by defining the free names for each term constructor:
+\begin{itemize}
+\item $\mathcal{FN}(0) = \emptyset$\\
+The stopped process has no free names, in fact, no names at all.
+
+\item $\mathcal{FN}( \text{for}(y \leftarrow x)P) = (\mathcal{FN}(P) \setminus \{ y \}) \cup \{ x \}$ \\
+In a receive, the name being listened for, $y$, is bound and the channel listened on, $x$, constitutes a free name. Importantly, the name $y$ we listen for is bound in the process $P$ so we discard $y$ from the collection of free names in $P$, hence the appearance of $\mathcal{FN}(P) \setminus \{ y \}$. Then $x$ is added to this collection. For this reason, the for-comprehension is a binder in $\rho$-calculus.
+
+\item $\mathcal{FN}(x!(P)) = \mathcal{FN}(P) \cup \{ x \}$ \\
+In a send, the channel $x$ the message $@P$ is sent on is a free name, along with the free names in the process $P$ being sent.
+
+\item $\mathcal{FN}(P|Q) = \mathcal{FN}(P) \cup \mathcal{FN}(Q)$ \\
+Analogously to application in $\lambda$-calculus, the collection of free names in the parallel composition of two processes is the union of the collections of free names in each process.
+
+\item $\mathcal{FN}({}^*x) = \{ x \}$ \\
+The only free name in a dereference ${}^*x$ is the name being dereferenced $x$. In this context, there is no access to the names in the underlying process of $x$. This is a very important, yet subtle, point. Since each name $x$ has an underlying process $P$, i.e. $x=@P$, we can rightfully think of the process ${}^*x$ as ${}^*@P$ and wonder how it relates to the original process $P$. Notice that $\mathcal{FN}({}^*@P) = \{ @P \}$, i.e. we do not have access to the free names in $P$, only the name $@P$, at this level.
+\end{itemize}
+
+\subsection{Structural congruence a.k.a. structural equivalence}
+Structural congruence is a semantic equivalence for syntactically distinct processes. For example, the process $P|Q$ denotes ``$P$ running in parallel with $Q$'' which means the same thing as ``$Q$ running in parallel with $P$,'' denoted by $Q|P$. Thus, we make these processes equivalent with the relation $P|Q \equiv Q|P$, i.e. the semantics impose commutativity of parallel composition.
+
+\href{https://blog.rchain.coop/calculus-primer-\%cf\%81-calculus/}{Recall}, structural equivalence for $\rho$-calculus, written $\equiv$, is the least congruence, containing $\alpha$-equivalence and satisfying the laws
+\[ P|0 \equiv P, \ \ \ P|Q \equiv Q|P, \ \ \ P|(Q|R) \equiv (P|Q)|R \]
+
+\subsection{Name equivalence}
+In $\rho$-calculus, processes can be turned into names by quoting and names can be turned into processes by dereference. Since names play a role distinct from processes, we also define the notion of \emph{name equivalence}, written $\equiv_N$, as follows:
+\begin{itemize}
+\item $@({}^*x) \equiv_N x$ \\
+If we start with the name $x$, dereference it to the process ${}^*x$, and then quote this process to the name $@({}^*x)$, this name is name equivalent to the original $x$.
+
+\item If $P \equiv Q$, then $@P \equiv_N @Q$ \\
+If the processes $P$ and $Q$ are structurally equivalent, then the names $@P$ and $@Q$ are name equivalent.
+\end{itemize}
+
+\subsection{Connections to other concepts}
+Universal algebra is study of general algebraic structures through the constructions of generators and relations. Generators give us a starting point and relations give us a notion of equivalence of elements in much the same way that in a computational calculus, the grammar gives us a starting point and the structural equivalence is our notion of equivalence. The case of a computational calculus turns out to give a deeper articulation of the generators and relations than that presented in universal algebra. 
+
+There are so many connections between computational calculi and category theory that we could write several posts about these connections alone. We will cover some of these category theoretic connections in later posts. For now, it suffices to mention the analogous roles in category theory of free monads to grammars and algebras on free monads to structural equivalence. 
+
+Rho calculus (and reflection, in general) opens up an entire universe of set theories based on the notion of annihilation used. We will discuss this further in later posts. \\
+
+\subsection{Summary}
+We discussed the notions of free and bound names in $\lambda$-calculus and $\rho$-calculus and how this relates to compilable programs. We also covered the different notions of equivalence used in $\rho$calculus: $\alpha$-equivalence, structural equivalence, and name equivalence.
+
+There are many connections to other areas of mathematics, notably universal algebra and category theory, and computer science which we have only begun to discuss.
+
+In the next post, we expand on our discussion of operational semantics.
+
+
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
