@@ -1,0 +1,186 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Computational Calculus Primer Part 1: Lambda calculus \& BNF}
+
+\maketitle
+
+\subsection{Overview}
+Greg Meredith has been teaching a weekly course called \emph{Introduction to the Design of Computational Calculi (DoCC)} in an effort to explain the foundations of mathematical models of grammar, how computational calculi are used in the RChain project, and how to design computational calculi for specific applications. As this is a highly technical topic, it may seem like the ideas are exotic or esoteric and difficult to wrap your head around. However, I am here to help you understand these ideas. I will make them as down-to-earth and comprehensible as possible while maintaining rigor and keeping in mind the higher purpose.
+
+The first few posts here will serve as background material required for following along with the course. We first need to cover some of the basics of computational calculi, like the syntax and semantics of $\lambda$-calculus, $\pi$-calculus, and the model RChain is built on, $\rho$-calculus. After covering these basics, there will be weekly posts explaining the DoCC material in more depth.
+
+First, we all need to get comfortable with BNF and $\lambda$-calculus. So we will start our discussion with grammar and operational semantics.
+
+\subsection{Baukus-Naur form (BNF)}
+The grammar we discuss will always be presented in what is known as \emph{Baukus-Naur form (BNF)} which is typical for programming languages. BNF is just a concise way of describing how the rules for the syntax work in a grammar, i.e. what ``admissible'' terms look like in the language. The BNF presentation of a grammar explicitly displays the syntactic rules. To keep the discussion concrete, let's look at the example of $\lambda$-calculus.
+
+\section{Lambda calculus}
+
+\subsection{Grammar}
+The $\lambda$-calculus is a universal model of computation, discovered by mathematician Alonzo Church in the 1930's. The BNF presentation of a grammar for $\lambda$-calculus:
+\begin{equation} \label{BNFLam}
+M, N ::= \ x \ | \ \lambda x.M \ | \ (M N)
+\end{equation}
+You don't actually need to know what these things mean yet, you just need to know that there are \emph{three} basic forms for terms which correspond to the three different rules for constructing terms. This presentation gives rise to a \emph{language}, the collection of $\lambda$-terms,  i.e. terms of the form described on the righthand side of the BNF presentation above. Our language consists of terms we call $M$ and $N$ of the form $x$ or $\lambda x. M$ or $(M N)$. Notice that these terms are built recursively so we actually have quite elaborate terms in our language. Keep in mind, we also get all admissible combinations of these forms in the language too.% In fact, the terms grow out of one another, branching like a tree, but we will discuss the structure of terms in much more depth later.
+
+It's a game. In this game, there are three rules describing how you may construct terms and a hat to draw names from. Each round, you have a $\lambda$-term $M$ to work from and you are given the choices: (i) draw a name $x$ from the hat, (ii) draw a name $x$ and form the abstraction $\lambda x. M$, (iii) choose another $\lambda$-term $N$ and form the application $(M N)$. That's it, now you can build any $\lambda$-term by playing sufficiently many rounds of this game.
+
+This begs the question of where we start. Well, we can always choose a variable $x$ from our variable set $X$, so let's start there. Let's make our first $\lambda$-term $x$. Then from this term, we can form other $\lambda$-terms, notably, $\lambda x. x$ and $(x \ x)$. Now we are off to the races! What other $\lambda$-terms can be formed?
+
+Returning to the BNF presentation of $\lambda$-calculus \eqref{BNFLam}. One noteworthy thing is the appearance of $x$ on the right-hand side. Where did that come from (there is only $M$ and $N$ on the left-hand side)? Well, it turns out that $x$ is just a \emph{name} or \emph{variable} we choose from out of a set $X$. This set $X$ is something we have control over and changing it changes the admissible expressions in our language. Therefore, we say that this grammar is \emph{paramteric} in the set of variables $X$. This leads some people to write the BNF presentation of $\lambda$-calculus in a slightly odd looking format with the variable set $X$ displayed explicitly
+\[ M[X] ::= \ X \ | \ \lambda X.M[X] \ | \ (M[X] \  M[X]) \]
+to emphasize the dependence of the $\lambda$-terms $M[X]$ on $X$. But I digress. The important thing here is that the $\lambda$-terms depend on the given variables.
+
+Another noteworthy aspect of \eqref{BNFLam} is the appearance of $M$s and $N$s on both sides of the BNF presentation. Basically, what this means is that if we have two $\lambda$-terms $M$ and $N$, we have a few options for creating new $\lambda$-terms, recursively:
+\begin{enumerate} 
+\item[(i)] $x$ \ (\emph{mention}; pick a variable from the set $X$, admittedly this has little to do with $M$ and $N$);
+\item[(ii)] $\lambda x. M$ \ (\emph{abstraction}; binds the variable $x$ in $M$, i.e. declares $x$ a variable in the function $M$);
+\item[(iii)] $(M N)$ \ (\emph{application}; ``applies'' the function $M$ to the argument $N$)
+\end{enumerate}
+That's basically it. Pretty simple, huh? We always have the option of forming these admissible terms given some admissible term(s). Let's look at a few examples. \\
+
+\noindent \textbf{Examples:}
+\begin{enumerate}
+\item $\lambda x. \lambda y. x$ is admissible (this is a really important example because it is the encoding of the Boolean function True in the $\lambda$-calculus) \\
+\emph{Proof:} $x$ is admissible $\implies M = \lambda y. x$ admissible $\implies \lambda x. M =\lambda x. \lambda y. x$ admissible
+
+\item $(\lambda x. x \ y)$ is admissible (this is also an important example because $\lambda x. x$ acts as the identity function in $\lambda$-calculus) \\
+\emph{Proof:} $\lambda x. x$ admissible $\implies (\lambda x. x \ y)$ admissible (application of $\lambda x. x$ to $y$)
+
+\item $x \ \lambda x.$ is not proper syntax $\implies$ not an admissible $\lambda$-term
+\end{enumerate}
+
+This is all we need to know about constructing $\lambda$-terms. However, this doesn't tell us anything about how these terms interact with one another. For that we will need to discuss the operational semantics.
+
+\subsection{Operational semantics}
+The $\lambda$-calculus captures the notion of a function; abstractions picking variables in the function and applications evaluating the function at the variable. This thinking guides the interactions between these constructions, known as the \emph{operational semantics}. There are two main relations in $\lambda$-calculus, $\alpha$-conversion and $\beta$-reduction:
+
+\begin{itemize}
+\item \emph{$\alpha$-conversion}: 
+\[ \lambda x. M\{ x \} \rightarrow \lambda y. M\{ y \} \]
+This rule deems terms that only differ by the names of their \emph{bound} variables \emph{structurally equivalent}. By structurally equivalent, we mean that these terms are indistinguishable from the viewpoint of computation. By bound variable, we mean something like $x$ in the expression $\lambda x. M\{ x \}$. The variable $x$ appears in the term $M$ (that's why it's being written like $M\{ x \}$) and $\lambda$ binds $x$ in this expression, i.e. $\lambda$ declares $x$ a variable in $M$. Another way to think about this is that a function $f$ can have $x$ as a variable, we write $f(x)$, or it can have $y$ as a variable, we write $f(y)$, and regardless of what we call the variable, this function denotes/does the same thing. This is the essence of $\alpha$-conversion. This is an equivalence of terms of the form $\lambda x. M$ and $\lambda y. M\{ y / x\}$.
+
+
+\item \emph{$\beta$-reduction}:
+\[ (\lambda x. M N) \rightarrow M\{ N / x \} \]
+This rule reduces an application of the form $(\lambda x. M N)$, where the first term is a $\lambda$-abstraction, $\lambda x. M$, to a substitution of the term $N$ for the variable $x$ in the term $M$. This is simply function evaluation. We are declaring $x$ a variable in the function $M$ and evaluating it at $N$, i.e. substituting $N$ for $x$. This can also be thought of as function composition. If we apply the function $f(x)$ to the function $g(y)$, we get the composition $f(g(y))$. This is exactly the same as substituting $x=g(y)$.
+\end{itemize}
+
+\noindent \textbf{Examples:}
+\begin{enumerate}
+\item $\lambda x. (x \ z) \rightarrow \lambda y. (y \ z)$ \\
+Let $M\{x\}=( x \ z)$ and $M\{y\}=(y \ z)$ so we have $\lambda x. (x \ z) = \lambda x. M\{x\} \rightarrow \lambda y. M\{y\} = \lambda y. (y \ z)$ by direct $\alpha$-conversion. Even though there is abstraction and application in the term $\lambda x. (x \ y)$, it does not $\beta$-reduce. Why not?
+
+\item $(\lambda x.(x \ x) \ y) \rightarrow (y \ y)$ \\
+This is a $\beta$-reduction because we are applying the abstraction $\lambda x.(x \ x)$ to the term $y$. Let $M\{x\}=(x \ x)$. Then $(\lambda x.(x \ x) \ y) = (\lambda x. M \ y) \rightarrow M\{y / x\}=(x \ x)\{ y / x \}=(y \ y)$ by direct $\beta$-reduction.
+
+\item $(\lambda x. (\lambda y. (x \ y) \ u) \ v) \rightarrow (v \ u)$ \\
+There are two rounds of $\beta$-reduction here. Let $M\{ x \}=(\lambda y.( x \ y) \ u)$. Then $(\lambda x. (\lambda y.( x \ y) \ u) \ v) = (\lambda x. M \ v) \rightarrow M\{ v / x \}=(\lambda y. ( x \ y) \ u)\{v / x \}=(\lambda y.( v \ y) \ u)$. Now we use a direct $\beta$-reduction on the remaining expression to get $(\lambda y. (v \ y) \ u) \rightarrow (v \ u)$. 
+\end{enumerate}
+
+To summarize, we have covered the grammar and operational semantics for $\lambda$-calculus. You should be feeling a mixture of confusion and comfort, if this topic is new to you. Admittedly, this doesn't directly tell us how $\lambda$-calculus is related to computation, but we will get there. One step at a time.
+
+Next, we will discuss the grammar and operational semantics for $\pi$-calculus.
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
