@@ -1,0 +1,210 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Intro to Design of Computational Calculi 3: Program Equivalence and Operational Semantics}
+
+\maketitle
+
+\subsection{Overview}
+In the previous post in this series, we covered \href{https://blog.rchain.coop/intro-docc-2/}{names, compilable programs, and equivalence of processes}.
+
+In this post, we will explain program equivalence and operational semantics. We also discuss the concepts of monoids and monads and their connection to computational calculi.
+
+\subsection{Domain-specific languages}
+Designing a computational calculus for use in a specific setting is synonymous with creating a domain-specific language. Domain-specific languages are an approach to problem-solving from a language perspective (e.g. HTML for web pages or Scheme). They are the product of language-oriented programming and among the most powerful problem-solving methodologies. In the blockchain space, we need a domain-specific language which captures the range of behaviors of users within the application.
+
+\subsection{Another look at alpha equivalence}
+The following ``Java" programs execute in exactly the same way despite referencing variables with different names.
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Program 1                					&  	Program 2  						\\
+\hline 													
+class C \{	\ \ \						&	class C \{	\ \ \ 						\\
+\ \ \ \ \ \ \ \ \ \  T m( A a )\{	 \ \ \		&	\ \ \ \ \ \ \ \ \ \  T m( A b )\{ \ \ \  		\\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \    if pred(a)\{ \ \ \	&	\ \ \ \ \ \ \ \ \ \ \ \ \ \ \   if pred(b)\{ \ \ \  	\\
+\ \ \ \     \}		 \ \ \					&	\ \ \ \     \}      \ \ \          				\\
+\ \ \ \ \ \ \ \      else\{	 \ \ \				&	\ \ \ \ \ \ \ \    else\{ \ \ \ 				\\
+\ \ \ \     \}		 \ \ \ 					&	\ \ \ \     \} \ \ \ 						\\
+\ \   \}		 \ \ \					&	 \ \ \} \ \ \							\\
+\}		 \ \ \						&	\} \ \ \							\\
+\hline
+\end{tabular}
+\end{center}
+Looking at Program 1, inside the class, C, there is a method, m, that takes in an argument, a, of type A, and returns something of type T. Inside the body, we test a predicate of the argument a. If true, we do something, and if false, we do something else. Looking at Program 2, inside the class, C, there is a method, m, that takes in an argument, b, of type A, and returns something of type T. Inside the body, we test a predicate of the argument b. If true, we do something, and if false, we do something else.
+
+We disregard the textual differences and treat these programs as the same because they execute in the same way (that's what's really important anyhow). The exact variable name does not matter as long as we are consistent with its usage. This is one way to think about $\alpha$-equivalence.
+
+Another way to think about the equivalence of programs is in terms of contexts. We say two programs are \emph{equivalent} if they behave the same in all contexts, i.e. we can freely substitute one for the other in all contexts.
+
+%Lambda calc: De Brujn index vs. memory allocation (this is getting outside my area of expertise, but I mention it so you can investigate further)
+
+\subsection{Universal algebra: monoids \& monads}
+From the viewpoint of universal algebra, in the $\pi$- and $\rho$-calculi, the collection of processes together with the par operator $|$, the stopped process 0, and the equations from structural equivalence, form an algebraic structure known as a monoid.
+
+We define a \emph{monoid} as a set $M$ equipped with a binary relation $*: M \times M \rightarrow M$ (i.e. for all $a, b \in M$, $a * b \in M$) and a distinguished element $e \in M$ (called the \emph{identity}) which satisfies the following properties:
+\begin{enumerate}
+\item[1.] For all $a, b, c \in M$, we have $(a * b) * c = a* (b * c)$. (associativity)
+
+\item[2.] For all $a \in M$, we have $a * e = a = e * a$. (left and right identity)
+\end{enumerate}
+We will denote all of this by displaying it as $(M, *, e)$.
+
+The monoid $(\mathcal{P}, |, 0)$ formed by the processes has the set of processes $\mathcal{P}$ as the underlying set, the par operator $|$ as the binary relation, the stopped process $0$ as the identity, and the laws for structural equivalence make $|$ associative and $0$ the identity. We actually have additional structure in this case since the order in which we par processes together is irrelevant. So $(\mathcal{P}, |, 0)$ is, in fact, a \emph{commutative} monoid.
+
+Bill Lawvere identified a relationship between the grammar-style presentation and the monadic presentation in the 1960's. He showed that the grammar-style presentation can be captured in what is called a \emph{Lawvere theory} and that Lawvere theories have a correspondence (isomorphism) to a monad, i.e. you can either start with the monad and get the theory or vice versa. Structural equivalences correspond to the algebras of the monad.
+
+In the 2000's, Jamie Gabbay and Andy Pitts showed that the grammar of a computational calculus, in most cases, is representable by a monad, and used the monadic machinery to abstract out the variable machinery.
+
+When we generate type systems using LADL, the monad will represent a key ingredient. Structural equivalence is the other ingredient; a wide range of monads give us freely-generated structures, a lot like the language generated from a grammar with no notion of equivalence of terms.
+
+\subsubsection{Example}
+One can freely generate the set of all strings over an alphabet $A=\{ a,b \}$. This collection, $L(A)$, is known as the \emph{language} over the alphabet $A$. We can do better, however. This language can be interpreted as a monoid with $\emptyset$ as the empty string using concatenation, $*$, as the binary operation. Since string concatenation is naturally associative and the empty string serves as the identity. For example, 
+\[ a*b=ab, \ aa*abba=aaabba, \ bbaa*\emptyset = bbaa = \emptyset * bbaa \]
+We can transform this monoid into a \emph{group} by adjoining complementary elements $\bar{a}$ and $\bar{b}$ satisfying the equations
+\[ a * \bar{a} = \bar{a} * a = \emptyset = \bar{b} * b = b * \bar{b} \]
+This makes it so that each element of $L(A)$ has an inverse, i.e. for each string $s_1$, there is a string $s_2$ such that $s_1 * s_2 = s_2 * s_1 = \emptyset$. For example, the inverse of $ab \bar{a} \bar{a} \bar{b}$ is $baa \bar{b} \bar{a}$ (why?).
+
+\section{Operational semantics i.e. reduction rules}
+
+\subsection{Lambda calculus}
+The rule for $\beta$-reduction in $\lambda$-calculus applies when an abstraction, which binds a variable in a term, is immediately followed by an application at the top level.
+\[ (\lambda x.M N) \rightarrow M\{ N/x \}\]
+
+\subsection{Rho calculus}
+The \emph{comm rule} for reduction in $\rho$-calculus applies when a send and a receive on the same channel are run in parallel. \\
+
+\noindent \emph{Comm rule}:
+\[ \text{for}( y\leftarrow x )P \ | \ x!(Q) \rightarrow P \{ @Q/y \} \]
+
+The comm rule has the following interactions with the par operator and structural equivalence. \\
+
+\noindent \emph{Par rule}:
+\begin{center}
+If $P \rightarrow P'$, then $P \ | \ Q \rightarrow P' \ | \ Q.$
+\end{center}
+
+\noindent \emph{Structural equivalence rule}:
+\begin{center}
+If $P \equiv P'$, $ P' \rightarrow Q'$, and $Q' \equiv Q$, then $P \rightarrow Q.$
+\end{center}
+
+Unlike the laws for structural equivalence, where information is preserved, through reduction, structure is lost or forgotten. Notice that the right side of the comm rule no longer refers to the name $x$.
+
+\subsubsection{Example}
+The reduction rules are purposely left in a succinct format because we can combine them at will. Say we have the expression
+\[ \text{for}(y \leftarrow x)P | R | x!(Q) \]
+We notice that there is a send and a receive on the channel $x$ so there will be a comm event. However, we can not immediately reduce this expression because the comm rule does not apply as is. We must first put the send and receive next to each other. Luckily, because of the structural equivalence laws, we know the par operator is commutative. Hence, we can change the order in which processes are par-ed together free of charge. So we switch the order of $R$ and $x!(Q)$ to get
+\[ \text{for}(y \leftarrow x)P | x!(Q) | R \]
+Now that the send and receive are adjacent, they can reduce under the comm rule, or can they?... The process $R$ is also present. The par rule comes to the rescue. Since $\text{for}(y \leftarrow x)P | x!(Q) \rightarrow P\{ @Q/y \}$, we have
+\[ \text{for}(y \leftarrow x)P | x!(Q) | R \rightarrow P\{ @Q/y \} | R \]
+Putting all the pieces together with the structural equivalence rule, we get
+\[ \text{for}(y \leftarrow x)P | R | x!(Q) \rightarrow P\{ @Q/y \} | R \]
+
+\subsection{Summary}
+We covered the notions of program equivalence and operational semantics. We also discussed how a language can be interpreted as a monoid and how the grammar-style presentation of a language relates to a Lawvere theory and hence a monad. Since monads are generalizations of monoids, we presented the definition of a monoid. Lastly, we discussed the operational semantics for $\lambda$-calculus and $\rho$-calculus.
+
+The next post in the DoCC series will discuss the injection of names into rho calculus.
+
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
