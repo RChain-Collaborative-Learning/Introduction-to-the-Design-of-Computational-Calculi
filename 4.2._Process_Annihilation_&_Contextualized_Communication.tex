@@ -1,0 +1,173 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Intro to Design of Computational Calculi 4.2: Process Annihilation and Contextualized Communication}
+
+\maketitle
+
+\subsection{Overview}
+Watch the lecture \href{https://www.youtube.com/watch?v=xGv_DykPNHA \& t=3050s}{here}.
+
+In the first part, we discussed ``\href{}{Injecting Names into $\rho$-calculus}'' which is what allows us to create the programming language, Rholang, from the computational calculus, $\rho$-calculus.
+
+In this second and final part, we will explore two variants of the operational semantics for $\rho$-calculus. These variants turn out to be more suitable for modeling biological and physical phenomena than the $\pi$-calculus or ambient calculus. The first variant deals with process annihilation, which is a relationship between processes reminiscent of matter/antimatter annihilation. The second variant deals with contextualized communication and allows for ease of communicating between different protocol layers.
+
+\section{Process annihilation}
+In the first variant, we modify the operational semantics by adding a precondition to the comm rule. Let's start by defining what it means for two processes to annihilate each other.
+
+Two processes $P$, $Q$ \emph{annihilate}, denoted $P \perp Q$, means:
+\[ \forall R. \ (P|Q \rightarrow^* R) \implies R \rightarrow^* 0 \]
+which is to say that if $P$ running in parallel with $Q$ reaches some state $R$, then that state $R$ eventually reaches 0. The implication then is that all reduction paths lead to 0 (why?). Even if there is recursion occurring within the processes, this relationship ensures termination. Just to be exceedingly clear, the expression $A \rightarrow^* B$ means the process $A$ eventually reduces to the process $B$, or in other words, $A$ reduces to $B$ in finitely many steps (including zero steps).
+
+\emph{Comm rule for annihilating processes}:
+\[ x_t=@T, \ x_s=@S, \ S \perp T \implies \text{for}( y \leftarrow x_t)P \ | \ x_s !(Q) \ | \rightarrow P \{ @Q/y \} \]
+On the surface, this definition is self-referential (we define process annihilation in terms of reductions and then annihilation implies something about reductions, how can it be?), and one may rightfully wonder if it ever gets off the ground. To get off the ground, we show that the stopped process annihilates itself:
+\[ 0 | 0 \equiv 0 \implies 0|0 \rightarrow^* 0 \implies 0 \perp 0 \]
+\[ \text{for}(@0 \leftarrow @0)0 \ | \ @0 !(0) \rightarrow 0 \]
+Therefore, $0 \perp 0$, or in other words, $@0$ is its own co-channel. In general, we say that $x_s$ and $x_t$ are in a \emph{channel/co-channel} relationship. And we are officially off the ground!
+
+Now that we know $ 0 \perp 0 $, we then get:
+\[ \text{for}( @0 \leftarrow @0 )0 | @0!(0) \rightarrow 0 \]
+which implies:
+\[ \text{for}( @0 \leftarrow @0 )0 \perp @0!(0) \]
+In fact, we have actually shown the existence of an infinite family of names which can serve as either end (source or target) of a channel.
+
+The ground serves as the base case of this well-founded condition, which means we can implement this code in Scala.
+
+In the case of physical phenomena, there is an explicit reductionist viewpoint. The dynamics of higher level phenomena are supposed to be accounted for by the dynamics of lower level phenomena. The hierarchy goes something like this:
+\begin{center}
+Biological dynamics $\leftarrow$ chemical dynamics $\leftarrow$ physical dynamics $\leftarrow$ quark dynamics $\leftarrow$ field/string dynamics $\leftarrow$ maybe something more fundamental...? \end{center}
+
+In this computational model, operations at one scale depend on operations at another scale. This is analogous to the \emph{compositionality} we observe in nature. This compositionality is fundamentally different from what we have in the $\lambda$-calculus and $\pi$-calculus. 
+
+
+\section{Contextualized communication}
+In the second variant, we modify the operational semantics by contextualizing the comm rule. This variant has the advantage of addressing issues of interoperability of different protocol layers.
+
+Contexts are of the form:
+\[ K ::= \ [ \ ] \ | \ \text{for}(y \leftarrow x)K \ | \ x !(K) \ | \ K|Q \]
+and we use the convention:
+\[ K[P] := K \{ P/ [ \ ] \} \]
+Contexts basically give us a way to knock ``holes'' in processes so that we may insert other processes.
+
+\emph{Communication in the context $K$} is the comm rule
+\[ \text{Comm}_K: \ \text{for}(y \leftarrow x)P \ | \ x !(Q) \rightarrow P \{ @K[Q]/y \} \]
+
+It turns out that knocking holes in types, like the type for processes, is related to the notion of a \emph{derivative} from ordinary calculus [1]. We will discuss this concept further in later posts.
+
+The motivation for thinking about things in this way: HTTP is typically written over top of TCP. In many cases, you may have applications which are used to talking to other applications at the TCP level (or HTTP level). You may want to connect them so that the TCP applications can talk to the HTTP applications. An adapter is needed to unpack HTTP requests and turn them into TCP requests (or package TCP requests and turn them into HTTP requests). This adapter code can be modeled with a context $K$ which is providing the adapter, packaging and unpackaging requests at different protocol levels.
+
+Adapting between different protocol levels, represented by different contexts, is given by composition of the contexts:
+\[ \text{Comm}_K: \ \text{for}(y \leftarrow x)P \ | \ x !(Q) \rightarrow P \{ @K[Q]/y \} \]
+\[ \text{Comm}_{K'}: \ \text{for}(y \leftarrow x)P \ | \ x !(Q) \rightarrow P \{ @K'[Q]/y \} \]
+\[ \text{Comm}_{K \circ K'}: \ \text{for}(y \leftarrow x)P \ | \ x !(Q) \rightarrow P \{ @K[K'[Q]]/y \} \]
+
+Mathematicians like to understand the operational semantics for process calculi in terms of category theory by creating categorical models. In the categorical models of process calculi, a way to preserve behavioral structure has been missing. The $\text{Comm}_K$ rule gives the first ever way to compose operational semantics while preserving behavioral structure. We will explore category theory and categorical models in more depth in future posts.
+
+\subsection{Summary}
+In this second and final part of the fourth DoCC lecture, we discussed two variants of the operational semantics for $\rho$-calculus: process annihilation and contextualized communication. Both variations offer a notion of compositionality which resembles the way complex, natural processes are built from more elementary one. This compositionality contributes one of the many ways that RChain plans to achieve massive scalability. 
+
+
+\subsection{Reference}
+1. McBride, Connor. \href{http://strictlypositive.org/diff.pdf}{\emph{Derivative of a Regular Type is its Type of One-Hole Context}}
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+

@@ -1,0 +1,178 @@
+\documentclass[12pt]{article}
+
+\pagestyle{plain}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+%to suppress page numbers, change to pagestyle{empty}
+
+%%% Special symbol packages %%%
+
+
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amsopn}
+\usepackage{stmaryrd}
+
+
+
+%%%%Page size controls %%%
+%%%%Changing textwidth requires adjusting oddsidemargin
+
+\setlength{\textwidth}{7 in}
+\setlength{\textheight}{9.25 in}
+\setlength{\headheight}{0 in}
+\setlength{\headsep}{0 in}
+\setlength{\topmargin}{0 in}
+\setlength{\oddsidemargin}{-.25 in}
+
+%%%special symbols%%%
+
+\newcommand {\qed} {$\blacksquare$}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\zbar}{\overline{z}}
+\newcommand{\OO}{\Omega}
+\newcommand{\oo}{\omega}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\disc}{\mathbb{D}}
+\newcommand{\thm}{\noindent \textbf{Theorem: }}
+\newcommand{\cor}{\noindent \textbf{Corollary: }}
+\newcommand{\defn}{\noindent \textbf{Definition: }}
+\newcommand{\zz}{\zeta}
+\newcommand{\sub}{\subset}
+\newcommand{\kpol}{K^{\circ}}
+\newcommand{\dzj}{\frac{\partial}{\partial z_j}}
+\newcommand{\dzbarj}{\frac{\partial}{\partial \bar{z}_j}}
+\newcommand{\dxj}{\frac{\partial}{\partial x_j}}
+\newcommand{\dyj}{\frac{\partial}{\partial y_j}}
+\newcommand{\lp}{\left( }
+\newcommand{\rp}{\right)}
+\newcommand{\bzj}{\bar{z_j}}
+\newcommand{\bz}{\bar{z_1}}
+\newcommand{\bzn}{\bar{z_n}}
+\newcommand{\parbar}{\bar{\partial}}
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\CinfpqO}{C^{\infty}_{(p,q)} (\Omega)}
+\newcommand{\CinfplusO}{C^{\infty}_{(p,q+1)} (\Omega)}
+\newcommand{\supp}{\emph{supp}}
+\newcommand{\lcap}{\text{cap}}
+\makeatletter
+\newcommand\xleftrightarrow[2][]{%
+  \ext@arrow 9999{\longleftrightarrowfill@}{#1}{#2}}
+\newcommand\longleftrightarrowfill@{%
+  \arrowfill@\leftarrow\relbar\rightarrow}
+\makeatother
+
+%%%environment controls%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{examples}[theorem]{Examples}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\author{}
+\date{}
+\title{Intro to Design of Computational Calculi 4.1: Injecting Names into Rho-Calculus}
+
+\maketitle
+
+\subsection{Overview}
+Watch the lecture \href{https://www.youtube.com/watch?v=xGv_DykPNHA \& t=3050s}{here}.
+
+In the previous post ``\href{https://www.rchain.coop/blog/intro-doc-3/}{Intro to Design of Computational Calculi 3}'', we covered program equivalence and operational semantics. In this first part of two, we will discuss the injection of names into $\rho$-calculus.
+
+Pure $\rho$-calculus is an elegant, abstract, minimal model for asynchronous, concurrent computation. It was designed to be useful, powerful, and efficient, but not necessarily ``user-friendly''.  As is, it does not provide a robust programming language. This can be easily remedied by injecting names. This is how Rholang was born.
+
+
+\section{Injecting names into rho-calculus}
+
+\subsection{Syntax}
+In building $\rho$-calculus, we have extensively discussed the role of processes and names and the rules under which they operate. However, in this abstract treatment, we did not connect these constructs to anything more concrete than ``programs" and ``code". To make $\rho$-calculus more practical, we can inject names that are not just quoted processes. We can give semantic meaning (in terms of the pure $\rho$-calculus) to an auxiliary supply of names by mapping the names to a specified namespace. This is the process of constructing Rholang from $\rho$-calculus (in the end, we get more ground terms besides $0$).
+
+Let $M$ be a set of names (i.e. URIs, email addresses, characters, numbers, etc.). We define the collection of $\rho$-calculus processes, $P[M]$, under the injection of the names $M$ by
+\begin{equation*}
+\begin{split}
+P[M] &::= \ 0 \ | \ \text{for}(m \leftarrow n)P \ | \ n!(Q) \ | \ P|Q \ | \ {}^*x \\
+x &::= \ @P \\
+m,n &::= \ x \ | \ M
+\end{split}
+\end{equation*}
+%where
+%\[ M ::= [\text{A-Z, a-z, 0-9}, \#, ...] \ | \ \text{URIs} \ | \ [\text{other sources of names}] \]
+
+Let's investigate each line here. We make a distinction between the names \emph{native} to $\rho$-calculus (i.e. quoted processes) and the \emph{injected} names (i.e those from the set $M$).
+\begin{itemize}
+\item $P[M] ::= \ 0 \ | \ \text{for}(m \leftarrow n)P \ | \ n!(Q) \ | \ P|Q \ | \ {}^*x $ \\
+As in pure $\rho$-calculus, we still have the stopped process $0$, parallel composition, and dereference of a quoted process. The two differences here are that we may now also send and receive messages on injected name channels. This means that it is now possible to send/receive messages on channels corresponding to the names from the set $M$.
+
+\item $x ::= \ @P$ \\
+This is the usual identification of native names (i.e. quoted processes) with a hint of subtlety due to the fact that processes may now mention injected names as well.
+
+\item $m,n ::= \ x \ | \ M$ \\
+This is what tells us that in addition to the native names, the injected names may be used for sending and receiving. Piecing all these declarations together, we see that native names still play the same role here as in pure $\rho$-calculus, but the injected names may not be dereferenced. This makes sense considering that they do not directly correspond to any process.
+\end{itemize}
+
+Using injection, we can provide a step-by-step mapping from user-friendly programming languages down to $\rho$-calculus. As an example of this principle, we can encode the `select' construct into $\rho$-calculus, even though $\rho$-calculus doesn't have the syntactic construct `select'.
+
+
+\subsection{Semantics}
+The idea for $\rho$-calculus is to be a minimal framework that can be understood well and have the ability to inject useful things into it. Injected items do not have immediate semantic interpretation in $\rho$-calculus. Once we have demonstrated a compilation, the semantics move over to the tuplespace, by becoming data that can be added or queried, because this is more efficient. This step-by-step encoding of features into $\rho$-calculus is how Rholang was born.
+
+
+\subsubsection{In the context of blockchains}
+In the expression:
+\[ \text{for}( y \leftarrow x )P \ | \ x!(Q_1) \ | \dots | \ x!(Q_n) \]
+we think of $y$ as an address that does not yet have a value. A \emph{comm event} will occur, reducing the expression. Once the comm event occurs, $y$ will be replaced by another name, giving the address a value.  We know that this has happened once we see the unguarded process $P$; this is when the transaction is committed. Here, there are multiple clients submitting values to the given address so this represents a \emph{race condition}. Since this expression reduces, we refer to it as a \emph{redex}.
+
+Every validator that is validating in the \emph{namesapce} that includes $x$, runs a copy of this redex. Since there are several valid reductions of this redex, the validators in this namespace must run consensus (Casper) to determine the winner of the race condition. Once consensus is reached, all validators record the winning value as showing up at the address $y$.
+
+For the validators not validating in this namespace, they simply don't care about this redex. This feature paralellizes computations happening in different namespaces.
+
+For the full details on how the operational semantics of process calculi and tuplespaces come into play in the context of blockchains, Greg refers us to the paper ``Mobile Processes for Programming the New Blockchain.''
+
+
+\subsection{Summary}
+In this first of two parts, we discussed the methodology of injecting names into $\rho$-calculus for the purpose of creating a user-friendly programming language, Rholang. We briefly described how we exploit the intrinsic semantics of the tuplespace and use independent namespaces to make computations more efficient in the context of a blockchain.
+
+In part two of this lecture, we explore two variants of the operational semantics for $\rho$-calculus: process annihilation and contextualized communication. \\
+
+For Rholang tutorials, \href{https://github.com/JoshOrndorff/LearnRholangByExample}{go here} or \href{https://developer.rchain.coop/tutorial/}{here}.
+
+
+\subsection{References}
+\begin{enumerate}
+\item Currin, Denman, Eykholt, Meredith. \href{https://media.readthedocs.org/pdf/mobile-process-calculi-for-programming-the-new-blockchain/latest/mobile-process-calculi-for-programming-the-new-blockchain.pdf}{\emph{Mobile Process Calculi for Programming the Blockchain: Release 1.0}}
+
+\item Denman, Eykholt, Meredith. \href{https://rchain-architecture.readthedocs.io/en/latest/}{\emph{RChain Platform Architecture}}
+\end{enumerate}
+
+%$\Rightarrow, \vee, \wedge, \implies, \vdash, \models, \Leftrightarrow, \iff, \sim, \oplus, \forall, \exists, \exists !, \equiv, \neg, \ulcorner, \urcorner, \llcorner, \lrcorner$
+
+
+\end{document}
+
